@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   <!--为了让IE支持bootstrap-->
+    <title>环路拓扑展现</title>
+    
+    <link rel="stylesheet" type="text/css" href="/static/trans_book/jquery-ui-1.11.4/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/trans_book/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" type="text/css" href="/static/jquery.showLoading/css/showLoading.css">
+    <link rel="stylesheet" type="text/css" href="/static/trans_book/css/mainPage.css">
+
+    <script type="text/javascript" src="/static/trans_book/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/jquery.showLoading/js/jquery.showLoading.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/trans_book/bootstrap-table/bootstrap-table.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/echarts.min.js"></script>  <!-- 引入 echarts.js -->  
+    <script type="text/javascript" src="/static/trans_book/js/js.cookie.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/json2.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/bootstrap-table-test.js"></script>
+</head>
+<body> 
+<div class="container-fluid" id="fullPage" style="height:100%">
+    <div class="row clearfix">
+        <div class="col-md-12 column" id="head">
+            <nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                    <!-- <a class="navbar-brand" href="#">Brand11</a> -->
+                    <!-- <img id="navbarIcon" src="/static/trans_book/pic/unicom.jpg"></img> -->
+                    <div id="navbarIcon">
+                    </div>
+                </div>
+                
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown active">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">拓扑分析<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                     <a href="javascript:displayContent1()">传输节点下挂业务分析</a>
+                                </li>
+                                <li>
+                                     <a href="javascript:displayContent2()">物理站点相关性分析</a>
+                                </li>
+                                <!-- <li>
+                                     <a href="#">Something else here</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                     <a href="#">Separated link</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                     <a href="#">One more separated link</a>
+                                </li> -->
+                            </ul>
+                        </li>
+                        <li>
+                             <a href="/bmap/optical_cable/" target="_blank">光缆图层</a>
+                        </li>
+                        <!-- <li>
+                            <form class="navbar-form navbar-left" role="search" id="headerSearchBox">
+                                 <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Search" style="width:320px">
+                                 </div>
+                                 <div id="searchBoxCloseButton" title="关闭" style="display: none;"></div>
+                                 <div id="searchBoxOpenButton" title="高级搜索"></div>
+                                 <button type="submit" class="btn btn-default">查询</button>
+                              </form> 
+                            <div id="advancedSearchBox">
+                            <div>
+                        </li> -->
+
+                    </ul>
+                    <!-- <ul class="nav navbar-nav navbar-right">
+                        <li>
+                             <a href="#">Link</a>
+                        </li>
+                        <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                     <a href="#">Action</a>
+                                </li>
+                                <li>
+                                     <a href="#">Another action</a>
+                                </li>
+                                <li>
+                                     <a href="#">Something else here</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                     <a href="#">Separated link</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul> -->
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+
+    <div class="row clearfix" id="content1" style="height:calc(100% - 71px)">
+        <div class="col-md-5 column">
+            <form class="form-inline" id="IndexForm">
+                <div class="form-group">
+                    <label class="sr-only" for="TypeSelect">查询选择</label>
+                    <select class="form-control" name="area" id="TypeSelect">
+                            <option value="01">网元</option>
+                            <option value="02">环路</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="InputBox">输入框</label>
+                    <input type="text" class="form-control" id="InputBox" aria-label="...">
+                </div>
+                <button type="submit" class="btn btn-default">查询</button>
+            </form>
+
+            <table id="NodeTable"></table>
+        </div>
+
+        <div class="col-md-7 column" style="height:100%">
+            <div id="ring-graph" style="position:absolute;top:0px;left:0px;bottom:0px;right:0px"></div>  <!--指定长度高度，用来放置环路展示图-->
+        </div>          
+    </div>
+
+    <div class="row clearfix" id="content2" style="display:none">
+        <div class="col-md-5 column">
+            <div id="C2LeftT1Toolbar">
+                <input type="button" id="C2UploadBtn" class="btn btn-primary" data-toggle="modal" data-target="#C2Modal1" value="上传"/>
+                <input type="button" id="C2AppendBtn" value="添加"/>
+                <input type="button" id="C2AnalysisBtn" value="分析"/>
+            </div> <!--文件上传框-->
+
+            <table id="C2LeftT1"></table>
+        </div>
+
+        <div class="col-md-7 column">
+            <table id="C2RightT1"></table>
+        </div>          
+    </div>
+</div>
+
+<!-- C2 Modal -->
+<div id="C2Modal1" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <form id="C2Modal1UploadForm" class="form-inline">
+                    <input type="file" id="C2Modal1FileUpload" name="excel"/>
+                    <button type="submit" class="btn btn-primary">上传</button> 
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript">
+    var ring='R649';
+    var refresh=true;
+    myChart = echarts.init(document.getElementById('ring-graph'));
+    (function (){
+    if(refresh){
+        //var ring = row.station.ring  //通过这样来更新环路
+        $.ajax({    //通过ajax嵌套来再获取环路拓扑图
+            url:"/test_fh_ipran/",
+            data:{'ring':ring},
+            beforeSend:function(xhr,settings){
+                var csrftoken = Cookies.get('csrftoken');
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            type:"POST",
+            dataType:"json",    //预期服务器返回的数据
+            success:generate_ring_echart    //调用函数生成echart图形展示
+        });
+    }    
+})()
+function displayContent1(){
+    $("#content1").css('display','block');
+    $('#content2').css('display','none');
+}
+
+function displayContent2(){
+    $("#content1").css('display','none');
+    $('#content2').css('display','block');
+}
+
+</script>
+</html>

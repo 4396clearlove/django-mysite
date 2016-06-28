@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script type="text/javascript" src="/static/trans_book/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/echarts.min.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/js.cookie.js"></script>
+</head>
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <form id="ring-form"> <!--label标签与控件水平放置，enctype="multipart/form-data"-->
+        <div class="form-group">
+            <label for="ring" class="control-label col-sm-3">环路:</label>
+            <div class="input-group col-sm-9">
+                <input type="text" class="form-control" id="ring">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-8 col-sm-4">
+                <button type="submit" class="btn btn-default col-sm-12">查询</button>
+            </div>
+        </div>
+    </form>
+    <div id="main" style="width: 800px;height:600px;"></div>
+
+    <script>
+        $("#ring-form").submit(function(){     //必须得submit form才能不刷新
+
+        var dataPara = {};
+        var ring = $("#ring-form").find("#ring")[0].value;
+
+        dataPara['ring'] = ring
+        $.ajax({
+            url:"/ring/",
+            data:dataPara,  //这里是js的字典
+            beforeSend:function(xhr,settings){
+                var csrftoken = Cookies.get('csrftoken');
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            type:"POST",
+            dataType:"json",    //预期服务器返回的数据
+            success:handle,
+        });
+
+        return false;   //一定得false才不会刷新页面
+        });
+
+        function handle(data){
+            //alert('success');
+            var nodes = [];
+            var links = [];
+            $.each(data, function(i){
+                if(data[i].index==0){       //第一个节点就是带环点
+                    var symbolSize = 13;
+                    var category = 0;
+                }
+                else{
+                    var symbolSize = 10;
+                    var category = 1;
+                }
+
+                x1 = {
+                    name:data[i].name,
+                    value:data[i].value,
+                    draggable:true,
+                    symbolSize: symbolSize,
+                    label:{
+                        normal: {
+                            show:true,
+                            formatter:data[i].value,
+                            position:'bottom'
+                        },
+                        emphasis: {
+                            show:true,
+                            formatter:data[i].value,
+                            position: 'bottom',
+                            textStyle: {
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    category: category
+                };
+                nodes.push(x1);
+
+                x2 = {
+                    source:data[i].name,
+                    target:data[i].target
+                }
+                links.push(x2);
+
+            });
+
+            
+
+            option = {
+                title: {
+                    text: 'ECharts图表'
+                },
+
+                //color: ['#2cb53c'], //必须是列表
+                legend: [{
+                    // selectedMode: 'single',
+                    data: ['带环点','环路节点']
+                    
+                }],
+                
+                series: [{
+                    //color: ['#2cb53c'],
+                    
+                    type: 'graph',
+                    layout: 'force',
+                    roam: true,
+                    //默认false，鼠标拖动与缩放。
+                    symbol: 'roundRect',
+                    //节点图形
+                    
+                    itemStyle: {
+                        emphasis: {
+                            //corlor: '#2cb53c',
+                            shadowColor: 'rgba(0, 0, 0, 0.5)',
+                            shadowBlur: 10
+                        }
+                    },
+                    //节点显示，分为normal与emphasis两种状态
+                    lineStyle: {
+                        emphasis: {
+                            shadowColor: 'rgba(0, 0, 0, 0.5)',
+                            shadowBlur: 10
+                        }
+                    },
+                    //线条的显示，也一样分为normal与emphasis两种状态
+
+                    animation: true,    //开启动画，默认开启
+                    
+                    //left: (idx % 4) * 25 + '%', 
+                    //组件离容器左侧的距离。
+                    //top: Math.floor(idx / 4) * 25 + '%',
+                    width: '20%',
+                    height: '20%',
+                    force: {
+                        // initLayout: 'circular'
+                        // gravity: 0
+                        repulsion: 100,
+                        edgeLength: 5
+                    },
+                    //力引导布局相关的配置项，力引导布局是模拟弹簧电荷模型在每两个节点之间添加一个斥力，每条边的两个节点之间添加一个引力，每次迭代节点会在各个斥力和引力的作用下移动位置，多次迭代后节点会静止在一个受力平衡的位置，达到整个模型的能量最小化。
+
+                    data: nodes,
+                    edges: links,
+                    //重要！节点关系，同links,源宿为data中的name值
+                    categories:     //放置在Series中的
+                    [
+                        {
+                            name: '带环点',
+                            symbol: 'pin',  //不清楚设置为什么无效
+                            symbolSize: 18, //不清楚设置为什么无效
+                            itemStyle: {
+                                normal: {
+                                    color: '#00F5FF'
+                                }
+                            }
+                        },
+                        {
+                            name: '环路节点',
+                            symbolSize: 28, //不清楚设置为什么无效
+                            itemStyle: {
+                                normal: {
+                                    color: '#2cb53c'
+                                }
+                            }
+                        }
+                    ],
+                }]
+            }
+
+            var myChart = echarts.init(document.getElementById('main'));
+
+            myChart.setOption(option);
+
+            myChart.on('click', event_test);
+
+            
+        }
+
+        function event_test(param){
+                alert(param.name);
+            }
+
+    </script>
+</body>
+</html>

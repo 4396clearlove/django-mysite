@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   <!--为了让IE支持bootstrap-->
+    <title>环路拓扑展现</title>
+    
+    <link rel="stylesheet" type="text/css" href="/static/trans_book/jquery-ui-1.11.4/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/trans_book/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" type="text/css" href="/static/jquery.showLoading/css/showLoading.css">
+
+    <script type="text/javascript" src="/static/trans_book/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/trans_book/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/static/jquery.showLoading/js/jquery.showLoading.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/trans_book/bootstrap-table/bootstrap-table.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/echarts.min.js"></script>  <!-- 引入 echarts.js -->  
+    <script type="text/javascript" src="/static/trans_book/js/js.cookie.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/json2.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/trans-pology.js"></script>
+    <style type="text/css">
+        html,body{
+            height:100%;
+            margin:0;
+            padding:0;
+        }
+    </style>
+</head>
+<body> 
+<div class="container-fluid" id="fullPage" style="height:100%">
+    <div class="row clearfix">
+        <div class="col-md-12 column" id="head">
+            <nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">Brand</a>
+                </div>
+                
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active">
+                             <a onClick="modal_analysis_excel()">批量分析</a>
+                        </li>
+                        <li>
+                             <a href="/bmap/optical_cable/">光缆走向图</a>
+                        </li>
+                        <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                     <a href="/exceeded-node/" traget='_blank'>节点下挂业务分析</a>
+                                </li>
+                                <li>
+                                     <a href="#">Another action</a>
+                                </li>
+                                <li>
+                                     <a href="#">Something else here</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                     <a href="#">Separated link</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                     <a href="#">One more separated link</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                             <a href="#">Link</a>
+                        </li>
+                        <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                     <a href="#">Action</a>
+                                </li>
+                                <li>
+                                     <a href="#">Another action</a>
+                                </li>
+                                <li>
+                                     <a href="#">Something else here</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                     <a href="#">Separated link</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+
+    <div class="row clearfix" id="content" style="height:calc(100% - 71px)">
+        <div class="col-md-4 column">
+            <form class="form-inline" id="IndexForm">
+                <div class="form-group">
+                    <label class="sr-only" for="TypeSelect">查询选择</label>
+                    <select class="form-control" name="area" id="TypeSelect">
+                            <option value="01">网元</option>
+                            <option value="02">环路</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="InputBox">输入框</label>
+                    <input type="text" class="form-control" id="InputBox" aria-label="...">
+                </div>
+                <button type="submit" class="btn btn-default">查询</button>
+            </form>
+            
+            <div id="list-similar-station"></div>
+            <table id="NodeTable" data-toggle="table" data-height="450">
+                <thead>
+                <tr>
+                    <th data-field='id'>序号</th>
+                    <th data-field="station" data-formatter="StationFormatter">传输网元</th>
+                    <th data-field="bnum">业务数</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
+        <div class="col-md-4 column" style="height:100%">
+            <div id="toolbar">
+                <form class="form-inline" id="toolbar-form">
+                    <div class="form-group">
+                        <span>下带业务数超过:</span>
+                        <input name="bnum" class="form-control" type="number" value="15" min="10" style="width:60px">
+                    </div>
+                    <button id="toolbar-ok" type="submit" class="btn btn-default">Submit</button>
+                    <!--
+                    <button id="toolbar-button" class="btn btn-danger" disabled>
+                        <i class="glyphicon glyphicon-remove"></i> 移除
+                    </button>-->
+                </form>
+            </div>
+
+            <table id="IndexTable">
+                <thead>
+                <tr>
+                    <th data-field='id'>序号</th>
+                    <th data-field="station">站点名称</th>
+                    <th data-field="node">所属网元</th>
+                    <th data-field="ring">所属环路</th>
+                </tr>
+                </thead>
+            </table>
+
+            <!--
+            <table id="table">
+                <thead>
+                <tr>
+                    <th data-field="state" data-checkbox="true"></th>
+                    <th data-field="station-name">站点名称</th>
+                    <th data-field="node-down" data-formatter="node_down_list">下挂站点</th>
+                    <th data-field="business-down" data-formatter="business_down_list">下带业务</th>
+                    <th data-field="ring">环路</th>
+                </tr>
+                </thead>
+            </table>
+            -->
+        </div>        
+
+        <div class="col-md-4 column" style="height:100%">
+            <div id="ring-graph" style="position:absolute;top:0px;left:0px;bottom:0px;right:0px"></div>  <!--指定长度高度，用来放置环路展示图-->
+        </div>
+            
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $("#searchBox").autocomplete({
+        source:['python','C++',"java", "php", "coldfusion", "javascript", "asp", "ruby" ]
+    });
+</script>

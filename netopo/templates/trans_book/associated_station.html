@@ -1,0 +1,22 @@
+<h1>{{ node.name }}{{node.pk}}</h1>
+<a href="{% url 'node-detail' node.pk %}">{{ node.name }}</a>
+<ul>
+{% for station in node.hw_3g_sf_set.all %}
+    <li>{{ station.jz_name }} -- {{ station.jz_route }}</li>
+{% endfor %}
+</ul>
+<ul>
+{% for station in node.hw_3g_fe_set.all %}
+    <li>{{ station.jz_name }} -- {{ station.jz_route }}</li>
+{% endfor %}	
+</ul>
+<ul>
+{% for station in node.hw_3g_jz_set.all %}
+    <li>{{ station.jz_name }} -- {{ station.jz_route }}</li>
+{% endfor %}	
+</ul>
+
+<p>下挂节点：</p>
+{% for node in node_down %}
+<p><a href="{% url 'node-detail' node.pk %}">{{ node.name }}</a></p>
+{% endfor %}

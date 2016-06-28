@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   <!--为了让IE支持bootstrap-->
+    <title>环路拓扑展现</title>
+      
+    <link rel="stylesheet" type="text/css" href="/static/trans_book/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/trans_book/bootstrap-table/bootstrap-table.css">
+
+    <script type="text/javascript" src="/static/trans_book/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/trans_book/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/trans_book/bootstrap-table/bootstrap-table.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/js.cookie.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/json2.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/bootstrap-table-test.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/echarts.min.js"></script>  <!-- 引入 echarts.js -->   
+</head>
+<body> 
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">Brand</a>
+                </div>
+                
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active">
+                             <a onClick="modal_analysis_excel()">批量分析</a>
+                        </li>
+                        <li>
+                             <a href="#">Link</a>
+                        </li>
+                        <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                     <a href="/test/">Action</a>
+                                </li>
+                                <li>
+                                     <a href="#">Another action</a>
+                                </li>
+                                <li>
+                                     <a href="#">Something else here</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                     <a href="#">Separated link</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                     <a href="#">One more separated link</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" />
+                        </div> <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                             <a href="#">Link</a>
+                        </li>
+                        <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                     <a href="#">Action</a>
+                                </li>
+                                <li>
+                                     <a href="#">Another action</a>
+                                </li>
+                                <li>
+                                     <a href="#">Something else here</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                     <a href="#">Separated link</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-3 column">
+            <form class="form-horizontal" id="index-form"> <!--label标签与控件水平放置，enctype="multipart/form-data"-->
+                <div class="form-group">
+                    <label for="station_name" class="control-label col-sm-3">站名:</label> <!--for标签是指点中label时能激活输入框-->
+                    <div class="input-group col-sm-9">  
+                        <input type="text" class="form-control" id="station_name"/>
+                        <span class="input-group-addon">
+                            <input type="radio" name='radio' value='station_name' checked='checked'/>
+                        </span>
+                    </div><!-- /input-group -->
+                </div>
+
+                <div class="form-group">
+                    <label for="ring" class="control-label col-sm-3">环路:</label>
+                    <div class="input-group col-sm-9">
+                        <input type="text" class="form-control" id="ring">
+                        <span class="input-group-addon">
+                            <input type="radio" name='radio' value='ring'/>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4">导入表格:</label>
+                    <div class="input-group col-sm-8">
+                        <input class="btn btn-default  col-sm-12" type="file" id="import_excel_analysis"/>
+                        <span class="input-group-addon">
+                            <input type="radio" name='radio' value='import_excel'/>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-8 col-sm-4">
+                        <button type="submit" class="btn btn-default col-sm-12">查询</button>
+                    </div>
+                </div>
+            </form>
+
+            <div id="list-similar-station"></div>
+        </div>
+
+
+        <div class="col-md-9 column">            
+
+            <div class="row clearfix">
+                <div class="col-md-7 column">
+                    <div id="ring-graph" style="height:500px;"></div>  <!--指定长度高度，用来放置环路展示图-->
+                </div>
+            </div>
+
+            <div id="toolbar">
+                <form class="form-inline" id="toolbar-form">
+                    <div class="form-group">
+                        <span>下挂节点数超过: </span>
+                        <input name="nodes_num" class="form-control" type="number" value="3" min="1" style="width:60px">
+                    </div>
+                    <button id="toolbar-ok" type="submit" class="btn btn-default">OK</button>
+                    <button id="toolbar-button" class="btn btn-danger" disabled>
+                        <i class="glyphicon glyphicon-remove"></i> 移除
+                    </button>
+                </form>
+            </div>
+
+            <table id="table">
+                <thead>
+                <tr>
+                    <!--<th data-field="name">序号</th>-->
+                    <th data-field="state" data-checkbox="true"></th>
+                    <th data-field="station-name">站点名称</th>
+                    <th data-field="node-down" data-formatter="node_down_list">下挂站点</th>
+                    <th data-field="business-down" data-formatter="business_down_list">下带业务</th>
+                    <th data-field="ring">环路</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   <!--为了让IE支持bootstrap-->
+    <title>环路拓扑展现</title>
+      
+    <link rel="stylesheet" type="text/css" href="/static/trans_book/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/trans_book/bootstrap-table/bootstrap-table.css">
+
+    <script type="text/javascript" src="/static/trans_book/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/trans_book/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/trans_book/bootstrap-table/bootstrap-table.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/js.cookie.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/json2.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/bootstrap-table-test.js"></script>
+    <script type="text/javascript" src="/static/trans_book/js/echarts.min.js"></script>  <!-- 引入 echarts.js -->   
+</head>
+<body> 
+    <!--
+    <form id="ring-form">
+        <div class="form-group">
+            <label for="ring" class="control-label col-sm-3">环路:</label>
+            <div class="input-group col-sm-9">
+                <input type="text" class="form-control" id="ring">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-8 col-sm-4">
+                <button type="submit" class="btn btn-default col-sm-12">查询</button>
+            </div>
+        </div>
+    </form>
+    <div id="main" style="width: 800px;height:600px;"></div> <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">Brand</a>
+                </div>
+                
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active">
+                             <a onClick="modal_analysis_excel()">批量分析</a>
+                        </li>
+                        <li>
+                             <a href="#">Link</a>
+                        </li>
+                        <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                     <a href="/test/">Action</a>
+                                </li>
+                                <li>
+                                     <a href="#">Another action</a>
+                                </li>
+                                <li>
+                                     <a href="#">Something else here</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                     <a href="#">Separated link</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                     <a href="#">One more separated link</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" />
+                        </div> <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                             <a href="#">Link</a>
+                        </li>
+                        <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                     <a href="#">Action</a>
+                                </li>
+                                <li>
+                                     <a href="#">Another action</a>
+                                </li>
+                                <li>
+                                     <a href="#">Something else here</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                     <a href="#">Separated link</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-3 column">
+            <form class="form-horizontal" id="index-form"> <!--label标签与控件水平放置，enctype="multipart/form-data"-->
+                <div class="form-group">
+                    <label for="station_name" class="control-label col-sm-3">站名:</label> <!--for标签是指点中label时能激活输入框-->
+                    <div class="input-group col-sm-9">  
+                        <input type="text" class="form-control" id="station_name"/>
+                        <span class="input-group-addon">
+                            <input type="radio" name='radio' value='station_name' checked='checked'/>
+                        </span>
+                    </div><!-- /input-group -->
+                </div>
+
+                <div class="form-group">
+                    <label for="ring" class="control-label col-sm-3">环路:</label>
+                    <div class="input-group col-sm-9">
+                        <input type="text" class="form-control" id="ring">
+                        <span class="input-group-addon">
+                            <input type="radio" name='radio' value='ring'/>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4">导入表格:</label>
+                    <div class="input-group col-sm-8">
+                        <input class="btn btn-default  col-sm-12" type="file" id="import_excel_analysis"/>
+                        <span class="input-group-addon">
+                            <input type="radio" name='radio' value='import_excel'/>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-8 col-sm-4">
+                        <button type="submit" class="btn btn-default col-sm-12">查询</button>
+                    </div>
+                </div>
+            </form>
+
+            <div id="list-similar-station"></div>
+        </div>
+
+
+        <div class="col-md-9 column">
+            <div id="main" style="width: 800px;height:600px;"></div>
+            <div class="alert alert-success alert-dismissable">
+                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4>
+                    注意!
+                </h4> <strong>Warning!</strong> Best check yo self, you're not looking too good. <a href="#" class="alert-link">alert link</a>
+            </div>
+            <div id="toolbar">
+                <form class="form-inline" id="toolbar-form">
+                    <div class="form-group">
+                        <span>下挂节点数超过: </span>
+                        <input name="nodes_num" class="form-control" type="number" value="3" min="1" style="width:60px">
+                    </div>
+                    <button id="toolbar-ok" type="submit" class="btn btn-default">OK</button>
+                    <button id="toolbar-button" class="btn btn-danger" disabled>
+                        <i class="glyphicon glyphicon-remove"></i> 移除
+                    </button>
+                </form>
+            </div>
+
+            <table id="table">
+                <thead>
+                <tr>
+                    <!--<th data-field="name">序号</th>-->
+                    <th data-field="state" data-checkbox="true"></th>
+                    <th data-field="station-name">站点名称</th>
+                    <th data-field="node-down" data-formatter="node_down_list">下挂站点</th>
+                    <th data-field="business-down" data-formatter="business_down_list">下带业务</th>
+                    <th data-field="ring">环路</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    $("#ring-form").submit(function(){     //必须得submit form才能不刷新
+
+    var dataPara = {};
+    var ring = $("#ring-form").find("#ring")[0].value;
+
+    dataPara['ring'] = ring
+    $.ajax({
+        url:"/ipran_ring/",
+        data:dataPara,  //这里是js的字典
+        beforeSend:function(xhr,settings){
+            var csrftoken = Cookies.get('csrftoken');
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        },
+        type:"POST",
+        dataType:"json",    //预期服务器返回的数据
+        success:handle,
+    });
+
+    return false;   //一定得false才不会刷新页面
+    });
+
+    function handle(data){
+
+        var nodes = data.nodes;
+
+        $.each(nodes, function(i){
+            if(nodes[i].type=='root'){
+                nodes[i]['symbolSize'] = 23;
+                nodes[i]['category'] = 0;
+            }
+            else{
+                nodes[i]['symbolSize'] = 20;
+                nodes[i]['category'] = 1;
+                nodes[i]['draggable'] = true;
+            }
+            nodes[i]['label'] = {
+                                normal: {
+                                    show:true,
+                                    formatter:nodes[i].name,
+                                    position:'bottom'
+                                },
+                                emphasis: {
+                                    show:true,
+                                    formatter:nodes[i].name,
+                                    position: 'bottom',
+                                    textStyle: {
+                                        fontWeight: 'bold'
+                                    }
+                                }
+                            }
+        });
+        //alert('success');
+        /*
+        var nodes = [];
+        var links = [];
+        $.each(data, function(i){
+            if(data[i].index==0){       //第一个节点就是带环点
+                var symbolSize = 13;
+                var category = 0;
+            }
+            else{
+                var symbolSize = 10;
+                var category = 1;
+            }
+
+            x1 = {
+                name:data[i].name,
+                value:data[i].value,
+                draggable:true,
+                symbolSize: symbolSize,
+                label:{
+                    normal: {
+                        show:true,
+                        formatter:data[i].value,
+                        position:'bottom'
+                    },
+                    emphasis: {
+                        show:true,
+                        formatter:data[i].value,
+                        position: 'bottom',
+                        textStyle: {
+                            fontWeight: 'bold'
+                        }
+                    }
+                },
+                category: category
+            };
+            nodes.push(x1);
+
+            x2 = {
+                source:data[i].name,
+                target:data[i].target
+            }
+            links.push(x2);
+
+        });
+        */
+        
+
+        option = {
+            title: {
+                text: 'ECharts图表'
+            },
+
+            tooltip: {
+                //formatter: '{c}<br/>下带节点数:3<br/>下带业务数:5',
+                triggerOn: 'click',
+                enterable: true,
+
+                formatter: function(param, ticket, callback){
+                    var dataPara = {};
+                    //dataPara['links']    = JSON.stringify(data.links); //这里data是一个全局变量，data.links是一个列表，必须得转为json才能传过去
+                    dataPara['name']     = param.name;
+                    dataPara['ring']     = data.graph.ring;
+                    //dataPara['category'] = param.category;  //这里的类别用于区分带环节点
+
+                    $.ajax({
+                        //url:"/statistic?name="+param.value,
+                        url:"/statistic/",
+                        beforeSend:function(xhr,settings){
+                            var csrftoken = Cookies.get('csrftoken');
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        },
+                        data:dataPara,  //这里是js的字典
+                        dataType:"json",
+                        type:"POST",
+                        success:function(content){
+                            callback(ticket, content['NodeName']+'<br/>下带节点数:'+content['Nnode']+'<br/>下带业务数:'+content['Nbusiness']);
+                        }
+                    });
+                    return 'Loading';
+                }
+            },
+
+            //color: ['#2cb53c'], //必须是列表
+            legend: [{
+                // selectedMode: 'single',
+                data: ['带环点','环路节点']
+                
+            }],
+            
+            series: [{
+                //color: ['#2cb53c'],
+                
+                type: 'graph',
+                layout: 'force',
+                roam: true,
+                //默认false，鼠标拖动与缩放。
+                symbol: 'roundRect',
+                //节点图形
+                
+                itemStyle: {
+                    emphasis: {
+                        //corlor: '#2cb53c',
+                        shadowColor: 'rgba(0, 0, 0, 0.5)',
+                        shadowBlur: 10
+                    }
+                },
+                //节点显示，分为normal与emphasis两种状态
+                lineStyle: {
+                    emphasis: {
+                        shadowColor: 'rgba(0, 0, 0, 0.5)',
+                        shadowBlur: 10
+                    }
+                },
+                //线条的显示，也一样分为normal与emphasis两种状态
+
+                animation: true,    //开启动画，默认开启
+                
+                //left: (idx % 4) * 25 + '%', 
+                //组件离容器左侧的距离。
+                //top: Math.floor(idx / 4) * 25 + '%',
+                width: '20%',
+                height: '20%',
+                force: {
+                    // initLayout: 'circular'
+                    // gravity: 0
+                    repulsion: 1500,
+                    edgeLength: 25
+                },
+                //力引导布局相关的配置项，力引导布局是模拟弹簧电荷模型在每两个节点之间添加一个斥力，每条边的两个节点之间添加一个引力，每次迭代节点会在各个斥力和引力的作用下移动位置，多次迭代后节点会静止在一个受力平衡的位置，达到整个模型的能量最小化。
+
+                data: data.nodes,
+                edges: data.links,
+                //data: [{'id':2,'name':'test1'},{'id':3,'name':'test2'}],
+                //edges:[{'source':2,'target':3}],
+                //重要！节点关系，同links,源宿为data中的name值
+                categories:     //放置在Series中的
+                [
+                    {
+                        name: '带环点',
+                        //symbol: 'pin',  //不清楚设置为什么无效
+                        //symbolSize: 18, //不清楚设置为什么无效
+                        itemStyle: {
+                            normal: {
+                                color: '#00F5FF'
+                            }
+                        }
+                    },
+                    {
+                        name: '环路节点',
+                        //symbolSize: 28, //不清楚设置为什么无效
+                        itemStyle: {
+                            normal: {
+                                color: '#2cb53c'
+                            }
+                        }
+                    }
+                ],
+            }]
+        }
+
+        var myChart = echarts.init(document.getElementById('main'));
+
+        myChart.setOption(option);
+
+        //myChart.on('click', event_test);
+
+        
+    }
+
+    function event_test(param){
+            alert(param.name);
+        }
+
+</script>

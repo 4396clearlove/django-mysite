@@ -1,0 +1,16 @@
+<h>{{node.name}}</h>	<!--DetailView中指定了model是Node，则模板上下文中的变量名是node-->
+<ul>
+{% for station in node.hw_3g_sf_set.all %}
+    <li>{{ station.jz_name }} -- {{ station.jz_route }}</li>
+{% endfor %}
+</ul>
+<ul>
+{% for station in node.hw_3g_fe_set.all %}
+    <li>{{ station.jz_name }} -- {{ station.jz_route }}</li>
+{% endfor %}	
+</ul>
+<ul>
+{% for station in node.hw_3g_jz_set.all %}
+    <li>{{ station.jz_name }} -- {{ station.jz_route }}</li>
+{% endfor %}	
+</ul>

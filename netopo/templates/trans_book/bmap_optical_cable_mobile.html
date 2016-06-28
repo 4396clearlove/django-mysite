@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>光缆走向图</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+        <link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.4.5/themes/material/easyui.css">
+        <link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.4.5/themes/mobile.css">
+        <link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.4.5/themes/icon.css">
+        <style>
+            #map { 
+                position: absolute;
+                top: 43px;
+                bottom: 0px;
+                left: 0px;
+                right: 0px;
+            }
+            #message {
+                position: absolute;
+                top:58px;
+                height: 10%;
+                width: 100%;
+                display:none;
+                text-align:center;
+                background-color:#f2f2f2;
+                -webkit-box-shadow:0 2px 1px -1px rgba(0,0,0,.2);
+            }
+        </style>
+    </head>
+    <body>
+         <div class="easyui-navpanel">
+        <header>
+            <div class="m-toolbar">
+                <div class="m-title">Devices</div>
+            </div>
+        </header>
+        <div class="easyui-tabs" data-options="tabHeight:60,fit:true,tabPosition:'bottom',border:false,pill:true,narrow:true,justified:true">
+            <div>
+                <div class="panel-header tt-inner">
+                    <img src='../images/modem.png'/><br>Modem
+                </div>
+                <div id="map"></div>
+            </div>
+            <div style="padding:10px">
+                <div class="panel-header tt-inner">
+                    <img src='../images/scanner.png'/><br>Scanner
+                </div>
+                <input type="button" value="测试" id='testbutton'></input> 
+                <ul id="tab2_tree">
+                    <li>
+                        <span>My Documents</span>
+                        <ul>
+                            <li data-options="state:'closed'">
+                                <span>Photos</span>
+                                <ul>
+                                    <li>
+                                        <span>Friend</span>
+                                    </li>
+                                    <li>
+                                        <span>Wife</span>
+                                    </li>
+                                    <li>
+                                        <span>Company</span>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span>Program Files</span>
+                                <ul>
+                                    <li>Intel</li>
+                                    <li>Java</li>
+                                    <li>Microsoft Office</li>
+                                    <li>Games</li>
+                                </ul>
+                            </li>
+                            <li>index.html</li>
+                            <li>about.html</li>
+                            <li>welcome.html</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div style="padding:10px">
+                <div class="panel-header tt-inner">
+                    <img src='../images/pda.png'/><br>Pda
+                </div>
+                <p>A personal digital assistant (PDA), also known as a palmtop computer, or personal data assistant, is a mobile device that functions as a personal information manager. PDAs are largely considered obsolete with the widespread adoption of smartphones.</p>
+            </div>
+            <div style="padding:10px">
+                <div class="panel-header tt-inner">
+                    <img src='../images/tablet.png'/><br>Pda
+                </div>
+                <p>A tablet computer, or simply tablet, is a one-piece mobile computer. Devices typically have a touchscreen, with finger or stylus gestures replacing the conventional computer mouse.</p>
+            </div>
+        </div>
+    </div>
+    <style scoped>
+       .tt-inner{
+            display:inline-block;
+            line-height:12px;
+            padding-top:5px;
+        }
+        p{
+            line-height:150%;
+        }
+    </style>
+        <!--
+        <div data-role="page" id="pageone">
+            <div data-role="header">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#" data-icon="home">首页</a></li>
+                        <li><a href="javascript:test()" data-icon="arrow-r">页面二</a></li>
+                        <li><a href="#" data-icon="search">搜索</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="map"></div>
+        </div>-->
+        <div id="message">123322</div>
+    </body>
+
+</html>
+<script type="text/javascript" src="/static/trans_book/js/jquery-2.1.1.min.js"></script>
+<!-- <script type="text/javascript" src="/static/jquery-easyui-1.4.5/jquery.min.js"></script>-->
+<script type="text/javascript" src="/static/jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/static/jquery-easyui-1.4.5/jquery.easyui.mobile.js"></script>
+<script type="text/javascript" src="/static/trans_book/js/js.cookie.js"></script>
+<!-- <script src="http://api.map.baidu.com/api?v=2.0&ak=fUyHuVGV8jPlxb3wYuUGargm"></script> -->
+<script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=fUyHuVGV8jPlxb3wYuUGargm&v=1.0"></script>
+<script type="text/javascript" src="/static/bmap/js/GeoUtils.js"></script>
+<script type="text/javascript" src="/static/bmap/js/cable_bmap_mobile.js"></script>
+
+<script type="text/javascript">
+
+function test(){
+    // var para = {"cablePK": 241};
+    // addOverlay(para);
+    addOverlay("1463147002.66.826",'测试');
+}
+
+$("#testbutton").click(function(){
+    //addOverlay("1463147002.66.826",'测试');
+    //alert('test')
+    map.setViewport( $.data(document.body,"x").getPath())
+})
+
+$(function(){
+    //var para = {"id": "1463147002.66.826"};
+    addOverlay("1463147002.66.826",'测试');
+    map.setViewport( $.data(document.body,"x").getPath())
+    //var para = {"cablePK": 243};
+    //addOverlay(para);
+    
+    /*
+    //如果是手机浏览器的话，是用canvas展示折线，PC浏览器是通过SVG展示
+    $("canvas")[0].addEventListener('touchstart', function(e){
+        console.log(e);
+    },false);   //为画布添加事件
+    */
+});
+    
+</script>

@@ -17,7 +17,7 @@ html,body{
 	/*font-size: 0px;*/
 }
 
-#advancedSearchBox {
+/*#advancedSearchBox {
 	display: none;
 	width: 320px;
 	height: 100px;
@@ -57,7 +57,7 @@ html,body{
 	display: block;
 	background-color: #fff;
 	border-left: 1px solid #eee;
-}
+}*/
 
 #C2LeftT1Toolbar > input {
 	display: inline-block;

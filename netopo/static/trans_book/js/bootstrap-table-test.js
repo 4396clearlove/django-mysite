@@ -75,17 +75,38 @@ $(function () {
     $('#NodeTable').bootstrapTable({
         height: document.body.clientHeight-115,
         detailView: true,   //展开子表
+        url: "/netopo/bootstrap_table/data",
+        pagination: true,
+        sidePagination: 'server',
+        sortName: 'bnum',
+        sortOrder: 'desc',
+        filterControl: true,
+        // filterShowClear: true,
+        pageList:"[5, 10, 20, 50, 100, 200]",
+        locale: "zh-cn",
         columns: [{
             field:'id',
             title:'序号'
         },{
             field:'station',
+            filterControl:"input",
             title:"传输网元",
+            align:"center", //列名对齐方式
             formatter:StationFormatter
+        },{
+            field:'bnum',
+            sortable:true,
+            title:"逻辑站点数"
         }],
         onExpandRow: function(index, row, $detail){
             initSubTable(index, row, $detail); //生成子表
             generateEchartRing(row, true);  //生成环路图
+        },
+        formatShowingRows: function(pageFrom, pageTo, totalRows){
+            return ['总共 ',totalRows,' 条'].join("")
+        },
+        formatRecordsPerPage: function(pageNumber){
+            return pageNumber
         }
     });
 
@@ -516,9 +537,7 @@ function generate_ring_echart(data){
 }
 
 //用于格式化NodeTable中的单元格，显示为链接地址
-function StationFormatter(value){   //value = {'name':str,'pk':int, 'type':str, 'bnum':int}
-    //var o = "<a href='javascript:append_table(\"{0}\",\"{1}\",true)'>{2}</a>".format(value.type,value.pk,value.name);
-    //var o = '<button class="btn btn-primary" type="button">{0}<span class="badge">4</span></button>' 
+function StationFormatter(value){   //value = {'name':str,'pk':int, 'type':str} 
     if(value.type=="hw_ipran"){
         var type="华为分组"
     }
@@ -530,11 +549,7 @@ function StationFormatter(value){   //value = {'name':str,'pk':int, 'type':str, 
     value.name,
     '<span class="label label-info">',
     type,
-    '</span>',
-    '<span class="label label-success">',
-    value.bnum,
     '</span>'
-    //'</button>'
     ]
     return o.join("")
 }

@@ -140,6 +140,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
             //     }                
             // }
         }
+
+        return true;
     }
     
     /**

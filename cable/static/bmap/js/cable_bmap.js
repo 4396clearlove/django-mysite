@@ -2,6 +2,45 @@ var map = new BMap.Map("map", {enableMapClick:false}); //关闭地图的地图�
 var zTreeOverlay = {} //全局变量，用于存zTreeId对应的百度图层类容
 var colorArray = ['#FB054B','#3127D2', '#05AD0C', 'blue', '#C40AF6','#562B2B',  '#010B0A', '#94F807','#2C4C90', '#F607E0', '#C34F26']
 var colorIndex = 0
+
+var iconDict = {
+    "default":new BMap.Icon("/static/ztree/icon/pushpin/ylw-pushpin.png", 
+                                new BMap.Size(30,30), 
+                                {
+                                    imageSize:new BMap.Size(30,30),
+                                    anchor:new BMap.Size(10,30)
+                                }
+                            ),
+    "ylw-pushpin.png":new BMap.Icon("/static/ztree/icon/pushpin/ylw-pushpin.png", 
+                                new BMap.Size(30,30), 
+                                {
+                                    imageSize:new BMap.Size(30,30),
+                                    anchor:new BMap.Size(10,30)
+                                }
+                            ),
+    "homegardenbusiness.png":new BMap.Icon("/static/ztree/icon/shapes/homegardenbusiness.png", 
+                                new BMap.Size(30,30), 
+                                {
+                                    imageSize:new BMap.Size(30,30),
+                                    anchor:new BMap.Size(15,15)
+                                }
+                            ),
+    "placemark_circle.png":new BMap.Icon("/static/ztree/icon/shapes/placemark_circle.png.png", 
+                                new BMap.Size(30,30), 
+                                {
+                                    imageSize:new BMap.Size(30,30),
+                                    anchor:new BMap.Size(15,15)
+                                }
+                            ),
+    "placemark_square.png":new BMap.Icon("/static/ztree/icon/shapes/placemark_square.png", 
+                                new BMap.Size(30,30), 
+                                {
+                                    imageSize:new BMap.Size(30,30),
+                                    anchor:new BMap.Size(15,15)
+                                }
+                            ),
+}
+
 function colorPicker(){
     var selectColor = colorArray[colorIndex];
     colorIndex = colorIndex+1;
@@ -224,6 +263,7 @@ function addOverlay(id, name) {
             var coordinateType = data.coordinateType;
             var coordinates = objToBMPoint(data.coordinates);   //注意百度的点不等于{'lng':xx,'lat':yy}
             var pk = data.pk;   //数据库中的主键值
+            var icon = data.icon;
 
             if(coordinateType=="GPS"){
                 var pointArray = new Array();
@@ -384,11 +424,27 @@ function addOverlay(id, name) {
                         fillColor: "orange",
                         fillOpacity: 0.8//填充透明度,默认是0，看不到填充的颜色
                     });
+
+                    var ylw_pushpin = new BMap.Icon("/static/ztree/icon/pushpin/ylw-pushpin.png", 
+                                new BMap.Size(30,30), 
+                                {
+                                    imageSize:new BMap.Size(30,30),
+                                    anchor:new BMap.Size(15,30)
+                                }
+                            );
+
                     var marker = new BMap.Marker(result[0], {
-                        "icon": circle,
+                        "icon": iconDict[icon],
                         "title": name
                     });
+
+                    var marker2 = new BMap.Marker(result[0],{
+                        "icon":new BMap.Symbol(BMap_Symbol_SHAPE_CIRCLE)
+                    });
+
+
                     map.addOverlay(marker);
+                    map.addOverlay(marker2);
                     map.setViewport(result);
                     if (id) {
                         storeOverlay(id, [marker]); //储存覆盖物，以便移除时调用

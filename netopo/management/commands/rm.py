@@ -4,6 +4,7 @@ import os.path
 from django.core.management.base import BaseCommand, CommandError
 #from tool4db import hw_ipran
 from netopo.models import *
+from cable.models import *
 
 tableList = [
                 'ring',
@@ -20,6 +21,7 @@ tableList = [
                 'fh_ipran_business_3G_E1',
                 'fh_ipran_business_3G_FE',
                 'fh_ipran_business_LTE',
+                'coordinates_table'
             ]
 
 class Command(BaseCommand):

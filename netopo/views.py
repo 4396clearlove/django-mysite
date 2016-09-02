@@ -805,3 +805,41 @@ def analysisPhyStation(request):
         #import pdb;pdb.set_trace()
         #return JsonResponse(nodeInfoList, safe=False)
         return JsonResponse(nodeRingInfoList, safe=False)
+
+def bootstrap_table_data(request):
+    order = request.GET['order']
+    offset = int(request.GET['offset'])
+    limit = int(request.GET['limit'])+offset
+    if request.GET['order']=='desc':
+        order = '-'
+    else:
+        order = ''
+
+    if request.GET.get('search',None):  #字典取值，没有search这个键，返回None
+        NodeObjList = hw_ipran_node.objects.filter(name__contains=request.GET['search']).order_by(order+'BusinessAmount')
+    else:
+        NodeObjList = hw_ipran_node.objects.order_by(order+'BusinessAmount')
+
+    total = NodeObjList.count() #计数
+
+    NodeDictList = []
+    id = offset+1
+    for NodeObj in NodeObjList[offset:limit]:
+            IpranNodeDict = {
+                'id':id,
+                'station':
+                    {
+                        'name':NodeObj.name, 
+                        'pk':NodeObj.pk, 
+                        'type':'hw_ipran', 
+                        'ring':NodeObj.Ring,
+                        # 'bnum':NodeObj.BusinessAmount
+                    },
+                'bnum': NodeObj.BusinessAmount
+            }
+            id += 1
+            NodeDictList.append(IpranNodeDict)
+
+    #import pdb;pdb.set_trace()
+
+    return JsonResponse({"total":total,"rows":NodeDictList}, safe=False)

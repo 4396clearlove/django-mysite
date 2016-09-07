@@ -20,7 +20,9 @@
     <script type="text/javascript" src="/static/trans_book/js/echarts.min.js"></script>  <!-- 引入 echarts.js -->  
     <script type="text/javascript" src="/static/trans_book/js/js.cookie.js"></script>
     <script type="text/javascript" src="/static/trans_book/js/json2.js"></script>
-    <script type="text/javascript" src="/static/trans_book/bootstrap-table/extensions/filter-control/bootstrap-table-filter-control.js"></script>
+    <!--<script type="text/javascript" src="/static/trans_book/bootstrap-table/extensions/filter-control/bootstrap-table-filter-control.js"></script>-->
+    <script type="text/javascript" src="/static/trans_book/bootstrap-table/extensions/toolbar/bootstrap-table-toolbar.js"></script>
+    <!--<script type="text/javascript" src="/static/trans_book/bootstrap-table/extensions/filter/bootstrap-table-filter.js"></script>-->
     <script type="text/javascript" src="/static/trans_book/js/bootstrap-table-test.js"></script>
 </head>
 <body> 
@@ -60,7 +62,7 @@
 
     <div class="row clearfix" id="content1" style="height:calc(100% - 71px)">
         <div class="col-md-5 column">
-            <form class="form-inline" id="IndexForm" style="inline-block">
+            <!-- <form class="form-inline" id="IndexForm" style="inline-block">
                 <div class="form-group">
                     <label class="sr-only" for="TypeSelect">查询选择</label>
                     <select class="form-control" name="area" id="TypeSelect">
@@ -74,7 +76,42 @@
                 </div>
                 <button type="submit" class="btn btn-default">查询</button>
                 <button class="btn btn-default" style="inline-block">高级查询</button>
-            </form>
+            </form> -->
+            <div id="toolbar">
+                <button id="advancedSearchBtn" class="btn btn-default" data-toggle="collapse" data-target="#collapse1">
+                    <i class="glyphicon glyphicon-chevron-down"></i>
+                </button>
+                <button id="clearBtn" class="btn btn-default">清空</button>
+                <!-- <div id="collapse1" class="panel-collapse collapse" style="z-index:99999">
+                    <div class="panel-body">Panel Body</div>
+                    <div class="panel-footer">Panel Footer</div>
+                </div> -->
+                <div id="collapse1" class="collapse" style="position:absolute;top:36px">
+                    <div style="border:solid red;background:#fff;width:300px;height:300px;position:relative;top:0px;left:0px;z-index:2;padding:8px">
+                        <from class="form-horizontal">
+                            <div class="form-group">
+                                <label for="stationNum" class="col-sm-5 control-label">逻辑站数量：</label>
+                                <div class="col-sm-7">
+                                    <input id="stationNum" type="number" class="form-control" value="15" min="0"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="ringSelect" class="col-sm-5 control-label">环路：</label>
+                                <div class="col-sm-7">
+                                    <select id="ringSelect" class="form-control">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                        <option>6</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <table id="NodeTable"></table>
         </div>
 

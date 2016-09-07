@@ -73,15 +73,21 @@ $(function () {
 
     //节点展示表格
     $('#NodeTable').bootstrapTable({
-        height: document.body.clientHeight-115,
+        height: document.body.clientHeight-80,
         detailView: true,   //展开子表
         url: "/netopo/bootstrap_table/data",
+        toolbar: "#toolbar",
+        toolbarAlign: 'right',
         pagination: true,
         sidePagination: 'server',
         sortName: 'bnum',
         sortOrder: 'desc',
-        filterControl: true,
-        // filterShowClear: true,
+        // filterControl: true,
+        search: true,
+        // advancedSearch: true,
+        // idTable: 'advancedTable',
+        // searchOnEnterKey: true,
+        // showFilter: true,
         pageList:"[5, 10, 20, 50, 100, 200]",
         locale: "zh-cn",
         columns: [{
@@ -89,7 +95,7 @@ $(function () {
             title:'序号'
         },{
             field:'station',
-            filterControl:"input",
+            // filterControl:"input",
             title:"传输网元",
             align:"center", //列名对齐方式
             formatter:StationFormatter

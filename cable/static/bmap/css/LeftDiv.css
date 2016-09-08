@@ -87,6 +87,15 @@ div #side-content {
     margin: 0 0 0 10px;
 }
 
+.icon-reload {
+    background: url('/static/jquery-easyui-1.4.5/themes/icons/reload.png') no-repeat center center;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: 20px 20px;
+    position: relative;
+    top: 6px;
+}
 
 .ztree li span.button.default_ico_docu {
     margin-right: 2px;

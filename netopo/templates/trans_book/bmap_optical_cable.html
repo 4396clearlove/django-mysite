@@ -33,12 +33,13 @@
                 <div id="side-content">
                     <div style="margin:10px 0px 5px 5px">
                         <input id="ss" class="easyui-searchbox" 
-                        data-options="width:'290px',height:'30px',searcher:leftDivzTreeSearch,prompt:'多关键字空格分隔',menu:'#mm'"></input>
+                        data-options="width:'260px',height:'30px',searcher:leftDivzTreeSearch,prompt:'多关键字空格分隔',menu:'#mm'"></input>
                             
                         <div id="mm" style="width:120px">
                             <div data-options="name:'all',iconCls:'icon-ok'">全部</div>
                             <div data-options="name:'folders',iconCls:'icon-sum'">文件夹</div>
                         </div>
+                        <a href="javascript:void(0)" class="icon-reload"></a>
                     </div>
                     <!-- <div style="margin:10px;padding:5px">名称模糊搜索：<input id="searchinput" type="text"/><input id="searchbutton" type="button" value="查询"/></div> -->
                     <ul id="tree" class="ztree"></ul>
@@ -111,62 +112,6 @@
               </div>
             </div><!-- /.modal -->
         </div>
-        <!--
-        <div id="left-panel" class="" style="height: 587px;">
-            <div id="searchbox" class="clearfix">
-                <div id="searchbox-container">
-                    <div id="sole-searchbox-content" class="searchbox-content">
-                        <input id="sole-input" class="searchbox-content-common" type="text" name="word" autocomplete="off" maxlength="256" placeholder="输入名称搜索" value="">
-                        <div class="input-clear" title="清空" style="display: none;"></div>
-                        <div class="searchbox-content-button right-button route-button loading-button" data-title="路线" data-tooltip="1">
-                        </div>
-                        </div>
-                        </div>
-                        <button id="search-button" data-title="搜索" data-tooltip="2"></button>
-                        <div id="toast-wrapper">
-                        <div id="toast">
-                        <img class="info-tip-img" src="/wolfman/static/common/images/transparent.gif" alt="">
-                        <span class="info-tip-text"></span>
-                    </div>
-                </div>
-            </div>
-            <ul id="cards-level0" class="cardlist"></ul>
-            <ul id="cards-level1" class="cardlist"></ul>
-            <ul id="cards-level2" class="cardlist"></ul>
-        </div>
-        
-        <div class="ui3-suggest-wrap" id="ui3-suggest-wrap" style="top: 58px; left: 20px; z-index: 1000; width: 368px; display: none;">
-            <div id="ui3-suggest-scroll" style="width: 368px; height: 415px;">    
-                <ul>
-                    <div class="city-special-container">    
-                        <div class="city-special-list">        
-                            <div class="city-special-item" data-type="channel" data-key="美食" data-stat-code="sug.channel.cater">    
-                                <div class="city-list-item cater">找美食</div>        
-                            </div>        
-                            <div class="city-special-item" data-type="channel" data-key="酒店" data-stat-code="sug.channel.hotel">    
-                                <div class="city-list-item hotel">订酒店</div>        
-                            </div>        
-                            <div class="city-special-item" data-type="channel" data-key="公交站" data-stat-code="sug.channel.busstop">            
-                                <div class="city-list-item busstop">公交站</div>        
-                            </div>    
-                        </div>    
-
-                        <div class="city-normal-list">        
-                            <div class="city-normal-item" data-type="channel" data-key="景点" data-stat-code="sug.channel.scenery">景点</div>        
-                            <div class="city-normal-item" data-type="channel" data-key="电影院" data-stat-code="sug.channel.movie">电影院</div>        
-                            <div class="city-normal-item" data-type="channel" data-key="银行" data-stat-code="sug.channel.bank">银行</div>        
-                            <div class="city-normal-item city-normal-last" data-type="channel" data-key="KTV" data-stat-code="sug.channel.ktv">KTV</div>    
-                        </div>    
-
-                        <div class="clear-history" style="display: none;">        
-                            <span class="clear-login"><a class="clear-login-link">立即登录</a>可同步云端历史记录</span>    
-                        </div>
-                    </div>
-                    <li class="ui3-suggest-item" data-from="3" data-type="history" data-key="发票 网上购买" data-location="" data-extra="" style="width: 368px;">    <a>        <i class="history">发票 网上购买</i>        <em></em>    </a></li><li class="ui3-suggest-item" data-from="3" data-type="history" data-key="南国花园" data-location="广州市天河区" data-extra="" style="width: 368px;">    <a>        <i class="history">南国花园</i>        <em>广州市天河区</em>    </a></li><li class="ui3-suggest-item" data-from="3" data-type="history" data-key="南天广场" data-location="" data-extra="" style="width: 368px;">    <a>        <i class="history">南天广场</i>        <em></em>    </a></li><li class="ui3-suggest-item" data-from="3" data-type="history" data-key="zaker" data-location="" data-extra="" style="width: 368px;">    <a>        <i class="history">zaker</i>        <em></em>    </a></li><li class="ui3-suggest-item" data-from="3" data-type="history" data-key="zaker guangz" data-location="" data-extra="" style="width: 368px;">    <a>        <i class="history">zaker guangz</i>        <em></em>    </a></li><li class="ui3-suggest-item" data-from="3" data-type="history" data-key="金成潮州酒楼" data-location="" data-extra="" style="width: 368px;">    <a>        <i class="history">金成潮州酒楼</i>        <em></em>    </a></li><li class="ui3-suggest-item" data-from="3" data-type="history" data-key="七所" data-location="" data-extra="" style="width: 368px;">    <a>        <i class="history">七所</i>        <em></em>    </a></li><li class="ui3-suggest-item" data-from="3" data-type="history" data-key="平沙南街" data-location="" data-extra="" style="width: 368px;">    <a>        <i class="history">平沙南街</i>        <em></em>    </a></li><li class="clear-history" data-extra="clear" style="width: 368px;"><span class="clear-login"><a class="clear-login-link">立即登录</a>可查看更多历史记录</span><a class="clear-link">删除历史</a></li>
-                </ul>
-            </div>
-        </div>
-        -->
     </body>
     <script type="text/javascript" src="/static/trans_book/js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="/static/jquery-easyui-1.4.5/jquery.easyui.min.js"></script>

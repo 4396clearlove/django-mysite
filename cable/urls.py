@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^store_points/$', views.bmapStorePoints),
     url(r'^get_ztree_nodes/$', views.ztreeGetNodes),
     url(r"^ztree/$", views.ztree),
-    url(r"^tree/getdata/$", views.ztreeGetNodes),
+    url(r"^ztree/getdata/$", views.ztreeGetNodes),
     url(r"^ztree/search/$", views.ztreeSearch),
     url(r"^mobile/easyui_tree/$", views.mobileEasyuiTree),
     url(r'^csv/$',views.csv),

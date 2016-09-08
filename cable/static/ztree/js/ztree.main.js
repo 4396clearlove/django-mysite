@@ -25,7 +25,7 @@ $(function(){
 var setting = {
     async: {
         enable: true,
-        url:"bmap/tree/getdata/",
+        url:"bmap/ztree/getdata/",
         autoParam:["id"],     //点击父节点加载子节点时提交的数据
         //otherParam:{"otherParam":"zTreeAsyncTest"}, //提交的额外参数，包括初始化时也会提交
         dataFilter: filter  //用于对 Ajax 返回数据进行预处理的函数,该函数最终返回zTree支持的json格式数据，附加到父节点下
@@ -71,7 +71,7 @@ $("#searchbutton").click(function(){
         $("#fm-sidebar").showLoading();
         var param = {'kw':$("#searchinput").val()};
         $.ajax({
-            url: "bmap/tree/search/",
+            url: "bmap/ztree/search/",
             data: param, //这里是js的字典
             beforeSend: function(xhr, settings) {
                 var csrftoken = Cookies.get('csrftoken');

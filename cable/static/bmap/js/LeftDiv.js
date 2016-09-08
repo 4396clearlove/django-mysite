@@ -2,14 +2,15 @@ $(function(){
     $.fn.zTree.init($("#tree"), setting);
 })
 
+$(".icon-reload").click(function(){
+    $.fn.zTree.init($("#tree"), setting);
+});
 
 var setting = {
     async: {
         enable: true,
-        url:"/bmap/tree/getdata/",
-        autoParam:["id"],     //点击父节点加载子节点时提交的数据
-        // otherParam:{"otherParam":"zTreeAsyncTest"}, //提交的额外参数，包括初始化时也会提交
-        // dataFilter: filter  //用于对 Ajax 返回数据进行预处理的函数,该函数最终返回zTree支持的json格式数据，附加到父节点下
+        url:"/bmap/ztree/getdata/",
+        autoParam:["id"]     //点击父节点加载子节点时提交的数据
     },
     check: {
         enable: true
@@ -25,21 +26,12 @@ var setting = {
             //fontSize:150%
         }
     },
-    // edit:{
-    //     enable:true,
-    //     drag:{
-    //         isMove:true,
-    //         inner:false
-    //     }
-    // },
     callback: {
         onCheck: onCheck,    //选定及取消复选框调用的事件
         onDrop: onDrop,  //用于捕获节点拖拽操作结束的事件回调函数
-        onClick: onClick,   //节点被点击触发
-        //onClick: onClick
+        onClick: onClick   //节点被点击触发
     }
 };
-
 
 var C = function(D) {
     if (D == "close") {
@@ -90,10 +82,11 @@ function leftDivzTreeSearch(value, type){   //点击查询时触发的事件函�
     if(value==""){
         $.messager.alert('错误','输入不能为空！');
     }else{
+        searchFlag = true;
         $("#fm-sidebar").showLoading();
         var param = {'kw':value,'type':type};
         $.ajax({
-            url: "/bmap/tree/search/",
+            url: "/bmap/ztree/search/",
             data: param, //这里是js的字典
             beforeSend: function(xhr, settings) {
                 var csrftoken = Cookies.get('csrftoken');
@@ -102,37 +95,9 @@ function leftDivzTreeSearch(value, type){   //点击查询时触发的事件函�
             type: "POST",
             //dataType: "json", //预期服务器返回的数据
             success: function(data) {
-                // var setting = {
-                //     async: {    //搜索得出空文件夹时再次打开会进行异步加载，不过不是空文件夹就无法再进行异步加载了。
-                //         enable: true,
-                //         url:"/ztree/getdata/",
-                //         autoParam:["id"],     //点击父节点加载子节点时提交的数据
-                //         //otherParam:{"otherParam":"zTreeAsyncTest"}, //提交的额外参数，包括初始化时也会提交
-                //         //dataFilter: filter  //用于对 Ajax 返回数据进行预处理的函数,该函数最终返回zTree支持的json格式数据，附加到父节点下
-                //     },
-                //     data:{
-                //         simpleData:{
-                //             enable:true
-                //         }
-                //     },
-                //     check: {
-                //         enable: true
-                //     },
-                //     view: {
-                //         fontCss: {
-                //             //color: "red"
-                //             //fontSize:150%
-                //         }
-                //     },
-                //     callback: {
-                //         onCheck: onCheck,    //选定及取消复选框调用的事件
-                //         onDrop: onDrop,  //用于捕获节点拖拽操作结束的事件回调函数
-                //         onClick: onClick   //节点被点击触发
-                //     }
-                // };
                 $.fn.zTree.init($("#tree"), setting, data); //同步调用数据
-                var treeObj = $.fn.zTree.getZTreeObj("tree");
-                treeObj.expandAll(true);
+                var treeSearchObj = $.fn.zTree.getZTreeObj("tree");
+                treeSearchObj.expandAll(true);
                 $("#fm-sidebar").hideLoading();
             }
         });

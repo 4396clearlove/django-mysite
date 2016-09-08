@@ -174,6 +174,7 @@ def ztreegetdata(request):
 def ztreeSearch(request):
     import time
     t1 = time.time()
+    #import pdb;pdb.set_trace()
     if request.method=='POST':
         kw = request.POST['kw']
         searchObjList = coordinates_table.objects.filter(Name__contains=kw)  #ToDo Test

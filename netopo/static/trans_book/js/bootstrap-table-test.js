@@ -1,6 +1,4 @@
 $(function () {
-    //定义echarts全局变量
-    myChart = echarts.init(document.getElementById('ring-graph'));
 
     //展开高级搜索框
     $('#searchBoxOpenButton').click(function () {
@@ -107,6 +105,19 @@ $(function () {
         onExpandRow: function(index, row, $detail){
             initSubTable(index, row, $detail); //生成子表
             generateEchartRing(row, true);  //生成环路图
+        },
+        onClickRow: function(row, $element, field){ //点击行实现展开与收缩，参考行前的标记实现的。
+            var index = $element.data()['index'];
+            if($element.next().is('tr.detail-view')){   //通过这句来判断是否已经展开
+                $("#NodeTable").bootstrapTable('collapseRow',index);
+                // $element.next().remove();
+                // $element.find('i').attr('class',"glyphicon glyphicon-plus icon-plus");
+            } else {
+                $("#NodeTable").bootstrapTable('expandRow',index);
+            }
+        },
+        onCollapseRow: function(index, row){
+            echarts.dispose(myChart);
         },
         formatShowingRows: function(pageFrom, pageTo, totalRows){
             return ['总共 ',totalRows,' 条'].join("")
@@ -374,7 +385,8 @@ generateEchartRing = function (row, refresh){
 
 //生成环路echart图
 function generate_ring_echart(data){
-
+    //定义echarts全局变量
+    myChart = echarts.init(document.getElementById('ring-graph'));
     var nodes = data.nodes;
 
     $.each(nodes, function(i){

@@ -75,6 +75,9 @@ $(function () {
         detailView: true,   //展开子表
         url: "/netopo/bootstrap_table/data",
         toolbar: "#toolbar",
+        showExport: true,
+        //showRefresh:true,
+        exportDataType:"all",
         toolbarAlign: 'right',
         pagination: true,
         sidePagination: 'server',
@@ -369,6 +372,7 @@ generateEchartRing = function (row, refresh){
     if(refresh){
         var ring = row.station.ring;  //通过这样来更新环路
         var type = row.station.type;
+        var name = row.station.name;    //用来标记查询的节点
         $.ajax({    //通过ajax嵌套来再获取环路拓扑图
             url:"",
             data:{'ring':ring, "type":type},
@@ -378,26 +382,33 @@ generateEchartRing = function (row, refresh){
             },
             type:"POST",
             dataType:"json",    //预期服务器返回的数据
-            success:generate_ring_echart    //调用函数生成echart图形展示
+            success:function(data){
+                generate_ring_echart(data, name)
+            }   //调用函数生成echart图形展，通过匿名函数来传递参数
         });
     }    
 }
 
 //生成环路echart图
-function generate_ring_echart(data){
+function generate_ring_echart(data, name){ //name为选取节点的名称
     //定义echarts全局变量
     myChart = echarts.init(document.getElementById('ring-graph'));
     var nodes = data.nodes;
 
     $.each(nodes, function(i){
+
         if(nodes[i].type=='root'){      //通过type来区分是否带环点，这里的type值是在后端构造的
-            nodes[i]['symbolSize'] = 23;
+            nodes[i]['symbolSize'] = 25;
             nodes[i]['category'] = 0;
         }
-        else{
+        else if(nodes[i].name==name){
+            nodes[i]['symbolSize'] = 23;
+            nodes[i]['category'] = 2;
+        }else{
             nodes[i]['symbolSize'] = 20;
             nodes[i]['category'] = 1;
         }
+
         nodes[i]['draggable'] = true;
         nodes[i]['label'] = {
                             normal: {
@@ -515,7 +526,7 @@ function generate_ring_echart(data){
             },
             //力引导布局相关的配置项，力引导布局是模拟弹簧电荷模型在每两个节点之间添加一个斥力，每条边的两个节点之间添加一个引力，每次迭代节点会在各个斥力和引力的作用下移动位置，多次迭代后节点会静止在一个受力平衡的位置，达到整个模型的能量最小化。
 
-            data: data.nodes,
+            data: nodes,
             edges: data.links,
             //data: [{'id':2,'name':'test1'},{'id':3,'name':'test2'}],
             //edges:[{'source':2,'target':3}],
@@ -538,6 +549,14 @@ function generate_ring_echart(data){
                     itemStyle: {
                         normal: {
                             color: '#2cb53c'
+                        }
+                    }
+                },
+                {
+                    name: '被选取节点',
+                    itemStyle: {
+                        normal: {
+                            color: '#F5EE10'
                         }
                     }
                 }

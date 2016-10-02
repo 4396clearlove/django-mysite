@@ -807,9 +807,12 @@ def analysisPhyStation(request):
         return JsonResponse(nodeRingInfoList, safe=False)
 
 def bootstrap_table_data(request):
-    order = request.GET['order']
-    offset = int(request.GET['offset'])
-    limit = int(request.GET['limit'])+offset
+    #offset = int(request.GET['offset'])
+    #limit = int(request.GET['limit'])+offset
+    # import pdb;pdb.set_trace()
+    offset = request.GET.get('offset', 0)
+    limit = request.GET.get('limit', None)
+
     if request.GET['order']=='desc':
         order = '-'
     else:
@@ -823,23 +826,27 @@ def bootstrap_table_data(request):
     total = NodeObjList.count() #计数
 
     NodeDictList = []
-    id = offset+1
-    for NodeObj in NodeObjList[offset:limit]:
-            IpranNodeDict = {
-                'id':id,
-                'station':
-                    {
-                        'name':NodeObj.name, 
-                        'pk':NodeObj.pk, 
-                        'type':'hw_ipran', 
-                        'ring':NodeObj.Ring,
-                        # 'bnum':NodeObj.BusinessAmount
-                    },
-                'bnum': NodeObj.BusinessAmount
-            }
-            id += 1
-            NodeDictList.append(IpranNodeDict)
 
-    #import pdb;pdb.set_trace()
+    if not limit:
+        limit = total
+
+    offset = int(offset)
+    limit = offset+int(limit)
+    id = offset+1
+
+    for NodeObj in NodeObjList[offset:limit]:
+        IpranNodeDict = {
+            'id':id,
+            'station':
+                {
+                    'name':NodeObj.name, 
+                    'pk':NodeObj.pk, 
+                    'type':'hw_ipran', 
+                    'ring':NodeObj.Ring
+                },
+            'bnum': NodeObj.BusinessAmount
+        }
+        id += 1
+        NodeDictList.append(IpranNodeDict)
 
     return JsonResponse({"total":total,"rows":NodeDictList}, safe=False)

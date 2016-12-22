@@ -1,0 +1,145 @@
+$(function(){
+    Reveal.initialize({
+        center: true,
+        controls: false,
+        progress: false,
+        mouseWheel: true,
+        loop: true,
+        width: "100%",
+        height: "100%",
+        margin: 0,
+        minScale: 1,
+        maxScale: 1
+    });
+
+    Reveal.addEventListener('slidechanged', function(){
+        var index = Reveal.getState()['indexh']+1;
+        slideCharts(index);
+    });
+
+    initCharts();
+});
+
+function initCharts(){
+    var chart1 = echarts.init(document.getElementById('chart1'));
+    $.ajax({
+        url: "/flow_monitor/top5",
+        beforeSend:function(xhr,settings){
+            var csrftoken = Cookies.get('csrftoken');
+            xhr.setRequestHeader("X-CSRFToken", csrftoken)
+        },
+        // data:dataPara,
+        dataType:"json",
+        type:"POST",
+        success:function(content){
+            var option1 = {
+                title: {
+                    text: '汇聚环流量TOP 5',
+                    left: "50%",
+                    textAlign: "center"
+                },
+                tooltip: {},
+                legend: {
+                    data:['带宽利用率'],
+                    orient: "vertical",
+                    right:0,
+                    top: "30%"
+                },
+                xAxis: {
+                    data: content['ring']
+                },
+                yAxis:{
+                    type: 'value',
+                    name: '利用率',
+                    min: 0,
+                    max: 100,
+                    interval: 10,
+                    axisLabel: {
+                        formatter: '{value} %'
+                    }
+                },
+                series: [{
+                    name: '带宽利用率',
+                    type: 'bar',
+                    data: content['usage']
+                }]
+            };
+            chart1.setOption(option1);
+        }
+    });
+}
+
+function slideCharts(index){
+    if(index==1){
+        initCharts()
+    }
+    else{
+        var chart = echarts.init(document.getElementById('chart'+index));
+        $.ajax({
+            url: "/flow_monitor/usage/"+index,
+            beforeSend:function(xhr,settings){
+                var csrftoken = Cookies.get('csrftoken');
+                xhr.setRequestHeader("X-CSRFToken", csrftoken)
+            },
+            dataType:"json",
+            type:"POST",
+            success:function(content){
+                var option = {
+                    title: {
+                        text: content.ring,
+                        left: "50%",
+                        textAlign: "center"
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    toolbox: {
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    legend: {
+                        orient: "vertical",
+                        right:0,
+                        top: "30%",
+                        data:['平均带宽利用率','峰值带宽利用率']
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data:content['date']
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '利用率',
+                            min: 0,
+                            max: 100,
+                            interval: 10,
+                            axisLabel: {
+                                formatter: '{value} %'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name:'平均带宽利用率',
+                            type:'bar',
+                            data:content['averageUsage']
+                        },
+                        {
+                            name:'峰值带宽利用率',
+                            type:'line',
+                            data:content['peakUsage']
+                        }
+                    ]
+                };
+                chart.setOption(option);
+            }
+        });
+    } 
+}

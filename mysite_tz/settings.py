@@ -41,7 +41,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'netopo',
-    'cable'
+    'cable',
+    'flow_monitor'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -109,14 +110,19 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False  #不开启时区
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
+# STATIC_ROOT = 'test1'
 
-STATIC_URL = '/static/'     #'django.contrib.staticfiles'会搜索每个app中的static文件夹
+STATIC_URL = '/static/'     #'django.contrib.staticfiles'只会搜索每个app中的static文件夹，不会搜索主目录的static文件夹
 
 MEDIA_URL = "/"
 
 # Default settings
+
+STATICFILES_DIRS = [
+os.path.join(BASE_DIR, "static"),
+]

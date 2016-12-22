@@ -16,11 +16,12 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-import netopo, cable
+import netopo, cable, flow_monitor
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^netopo/', include('netopo.urls')),
     url(r'^bmap/', include('cable.urls')),
+    url(r'^flow_monitor/', include('flow_monitor.urls'))
 #] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ]

@@ -1,7 +1,9 @@
 $(function(){
     Reveal.initialize({
-        center: true,
+        center: true,   //垂直方向居中
         controls: false,
+        autoSlideStoppable: false,  //全屏也会自动切换
+        transition: 'convex',
         progress: false,
         mouseWheel: true,
         loop: true,
@@ -21,7 +23,9 @@ $(function(){
 });
 
 function initCharts(){
-    var chart1 = echarts.init(document.getElementById('chart1'));
+    var chart1_1 = echarts.init(document.getElementById('chart1_1'));
+    var chart1_2 = echarts.init(document.getElementById('chart1_2')); 
+    var chart1_3 = echarts.init(document.getElementById('chart1_3')); 
     $.ajax({
         url: "/flow_monitor/top5",
         beforeSend:function(xhr,settings){
@@ -34,19 +38,27 @@ function initCharts(){
         success:function(content){
             var option1 = {
                 title: {
-                    text: '汇聚环流量TOP 5',
+                    text: '核心环流量TOP 5',
                     left: "50%",
                     textAlign: "center"
                 },
-                tooltip: {},
+                tooltip: {
+                    trigger: 'axis'
+                },
                 legend: {
                     data:['带宽利用率'],
                     orient: "vertical",
                     right:0,
-                    top: "30%"
+                    top: "40%"
+                },
+                visualMap: {
+                    // type: 'continuous'
+                    type: 'piecewise',
+                    show: false
                 },
                 xAxis: {
-                    data: content['ring']
+                    data: content['hring']['ring'],
+                    name: '环路名称'
                 },
                 yAxis:{
                     type: 'value',
@@ -61,10 +73,108 @@ function initCharts(){
                 series: [{
                     name: '带宽利用率',
                     type: 'bar',
-                    data: content['usage']
+                    data: content['hring']['usage'],
+                    markLine: {
+                        data: [{
+                            name: '预警线',
+                            yAxis: 70
+                        }]
+                    }
                 }]
             };
-            chart1.setOption(option1);
+            var option2 = {
+                title: {
+                    text: '汇聚环流量TOP 5',
+                    left: "50%",
+                    textAlign: "center"
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['带宽利用率'],
+                    orient: "vertical",
+                    right:0,
+                    top: "40%"
+                },
+                visualMap: {
+                    type: 'piecewise',
+                    show: false
+                },
+                xAxis: {
+                    data: content['jring']['ring'],
+                    name: '环路名称'
+                },
+                yAxis:{
+                    type: 'value',
+                    name: '利用率',
+                    min: 0,
+                    max: 100,
+                    interval: 10,
+                    axisLabel: {
+                        formatter: '{value} %'
+                    }
+                },
+                series: [{
+                    name: '带宽利用率',
+                    type: 'bar',
+                    data: content['jring']['usage'],
+                    markLine: {
+                        data: [{
+                            name: '预警线',
+                            yAxis: 70
+                        }]
+                    }
+                }]
+            };
+            var option3 = {
+                title: {
+                    text: '接入环流量TOP 5',
+                    left: "50%",
+                    textAlign: "center"
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['带宽利用率'],
+                    orient: "vertical",
+                    right:0,
+                    top: "40%"
+                },
+                visualMap: {
+                    type: 'piecewise',
+                    show: false
+                },
+                xAxis: {
+                    data: content['rring']['ring'],
+                    name: '环路名称'
+                },
+                yAxis:{
+                    type: 'value',
+                    name: '利用率',
+                    min: 0,
+                    max: 100,
+                    interval: 10,
+                    axisLabel: {
+                        formatter: '{value} %'
+                    }
+                },
+                series: [{
+                    name: '带宽利用率',
+                    type: 'bar',
+                    data: content['rring']['usage'],
+                    markLine: {
+                        data: [{
+                            name: '预警线',
+                            yAxis: 70
+                        }]
+                    }
+                }]
+            };
+            chart1_1.setOption(option1);
+            chart1_2.setOption(option2);
+            chart1_3.setOption(option3);
         }
     });
 }
@@ -110,7 +220,8 @@ function slideCharts(index){
                     xAxis: [
                         {
                             type: 'category',
-                            data:content['date']
+                            data:content['date'],
+                            name: '日期'
                         }
                     ],
                     yAxis: [
@@ -129,11 +240,18 @@ function slideCharts(index){
                         {
                             name:'平均带宽利用率',
                             type:'bar',
-                            data:content['averageUsage']
+                            data:content['averageUsage'],
+                            markLine: {
+                                data: [{
+                                    name: '预警线',
+                                    yAxis: 70
+                                }]
+                            }
                         },
                         {
                             name:'峰值带宽利用率',
-                            type:'line',
+                            type:'bar',
+                            barGap: '0%',
                             data:content['peakUsage']
                         }
                     ]

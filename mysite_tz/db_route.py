@@ -6,6 +6,8 @@ class Router(object):
             return 'netopo'
         elif model._meta.app_label == 'cable':
             return 'cable'
+        elif model._meta.app_label == 'flow_monitor':
+            return 'flow_monitor'
         return None
 
     def db_for_write(self, model, **hints):
@@ -13,6 +15,8 @@ class Router(object):
             return 'netopo'
         elif model._meta.app_label == 'cable':
             return 'cable'
+        elif model._meta.app_label == 'flow_monitor':
+            return 'flow_monitor'
         return None
 
     def allow_relation(self, obj1, obj2, **hints):
@@ -21,6 +25,9 @@ class Router(object):
             return True
         elif obj1._meta.app_label == 'cable' or \
            obj2._meta.app_label == 'cable':
+            return True
+        elif obj1._meta.app_label == 'flow_monitor' or \
+           obj2._meta.app_label == 'flow_monitor':
             return True
         return None
 
@@ -31,8 +38,11 @@ class Router(object):
         elif db == 'netopo':
             return app_label == 'netopo'
 
+        elif db == 'flow_monitor':
+            return app_label == 'flow_monitor'
+
         elif db == 'default':
-            if app_label in ['cable', 'netopo']:
+            if app_label in ['cable', 'netopo', 'flow_monitor']:
                 return False
             return True
         

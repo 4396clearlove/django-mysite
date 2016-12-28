@@ -25,3 +25,7 @@ urlpatterns = [
     url(r'^flow_monitor/', include('flow_monitor.urls'))
 #] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns.append(url(r'^__debug__/', include(debug_toolbar.urls)))

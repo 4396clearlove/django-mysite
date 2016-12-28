@@ -40,7 +40,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
     'netopo',
     'cable',
     'flow_monitor'
@@ -55,7 +54,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'mysite_tz.urls'
@@ -136,13 +134,6 @@ MEDIA_URL = "/"
 STATICFILES_DIRS = [
 os.path.join(BASE_DIR, "static"),
 ]
-
-INTERNAL_IPS = ('127.0.0.1','10.117.193.171',)
-
-DEBUG_TOOLBAR_CONFIG = {
-# Toolbar options
-'JQUERY_URL': '//libs.baidu.com/jquery/1.9.1/jquery.min.js',
-}
 
 
 LOGGING = {

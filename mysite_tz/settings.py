@@ -96,7 +96,7 @@ DATABASES = {
     },
     'flow_monitor':{
         'ENGINE': 'sql_server.pyodbc',
-        'NAME': u'外部数据库',
+        'NAME': 'yunwei',
         'HOST': '10.117.193.233',
         'USER': 'zhongpeihong',
         'PASSWORD': 'Unicom2015',
@@ -104,7 +104,9 @@ DATABASES = {
 }
 
 if platform.system()=='Linux':
-        DATABASES['flow_monitor']['ENGINE'] = 'SQL Server'
+        DATABASES['flow_monitor']['OPTIONS'] = {
+            'DSN': 'MyDSN'
+        }
 
 
 DATABASE_ROUTERS = ['mysite_tz.db_route.Router']
@@ -126,7 +128,7 @@ USE_TZ = False  #不开启时区
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-# STATIC_ROOT = 'test1'
+STATIC_ROOT = 'server_static'   #命令python manage.py collectstatic会把所有静态文件保存在这里
 
 STATIC_URL = '/static/'     #'django.contrib.staticfiles'只会搜索每个app中的static文件夹，不会搜索主目录的static文件夹
 

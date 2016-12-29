@@ -1,0 +1,178 @@
+#fm-sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 26px;
+    height: 100%;
+    z-index: 999;
+    *border-right: 2px solid #959595;
+    -webkit-box-shadow: 10px 0px 10px 0px rgba(0,0,0,0.1);
+    box-shadow: 10px 0px 10px 0px rgba(0,0,0,0.1);
+    overflow: hidden
+}
+
+.fm-side-inner {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    overflow: hidden;
+    width: 350px;
+    background: #fff
+}
+
+.fm-side-inner .hide {
+    height: 0
+}
+
+.fm-side-inner .message {
+    color: #aaa
+}
+
+
+.fm-ctrlline {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 26px;
+    cursor: pointer;
+    z-index: 50
+}
+
+#fm-sidebar-ctrl {
+    position: absolute;
+    width: 16px;
+    height: 85px;
+    top: 312px;
+    right: 0;
+    margin-top: -43px;
+    background: top left;
+    background-image: url(/static/bmap/pic/sidebar_icon.png);
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+    zoom:1}
+
+.fm-ctrlline:hover #fm-sidebar-ctrl {
+    background: bottom left;
+    background-image: url(/static/bmap/pic/sidebar_icon.png)
+}
+
+.open #fm-sidebar-ctrl {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+    zoom:1
+}
+
+div #side-content {
+    margin:10px;
+    border: 1px solid #617775;
+    background: #E7F0FF;
+    width:303px;
+    height:85%;
+    overflow: scroll;
+}
+
+#leftDivImportBtn {
+    margin: 0 0 0 10px;
+}
+
+.icon-reload {
+    background: url('/static/jquery-easyui-1.4.5/themes/icons/reload.png') no-repeat center center;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: 20px 20px;
+    position: relative;
+    top: 6px;
+}
+
+.ztree li span.button.default_ico_docu {
+    margin-right: 2px;
+    background: url(/static/ztree/icon/pushpin/ylw-pushpin.png) no-repeat scroll 0 0 transparent;
+    /*background: url(/static/ztree/icon/shapes/homegardenbusiness.png) no-repeat scroll 0 0 transparent;*/
+    background-size: 16px 16px;
+    vertical-align: top
+}
+
+.ztree li span.button.default-line_ico_docu {
+    margin-right: 2px;
+    background: url(/static/ztree/icon/lines/default-line.png) no-repeat scroll 0 0 transparent;
+    /*background: url(/static/ztree/icon/shapes/homegardenbusiness.png) no-repeat scroll 0 0 transparent;*/
+    background-size: 16px 16px;
+    vertical-align: top
+}
+
+/*css中wht-circle.png需要转义为wht-circle\.png*/
+.ztree li span.button.ylw-pushpin\.png_ico_docu {
+    margin-right: 2px;
+    background: url(/static/ztree/icon/pushpin/ylw-pushpin.png) no-repeat scroll 0 0 transparent;
+    /*background: url(/static/ztree/icon/shapes/homegardenbusiness.png) no-repeat scroll 0 0 transparent;*/
+    background-size: 16px 16px;
+    vertical-align: top
+}
+
+.ztree li span.button.pink-pushpin\.png_ico_docu {
+    margin-right: 2px;
+    background: url(/static/ztree/icon/pushpin/pink-pushpin.png) no-repeat scroll 0 0 transparent;
+    /*background: url(/static/ztree/icon/shapes/homegardenbusiness.png) no-repeat scroll 0 0 transparent;*/
+    background-size: 16px 16px;
+    vertical-align: top
+}
+
+.ztree li span.button.wht-circle\.png_ico_docu {
+    margin-right: 2px;
+    background: url(/static/ztree/icon/paddle/wht-circle.png) no-repeat scroll 0 0 transparent;
+    /*background: url(/static/ztree/icon/shapes/homegardenbusiness.png) no-repeat scroll 0 0 transparent;*/
+    background-size: 16px 16px;
+    vertical-align: top
+}
+
+.ztree li span.button.grn-blank\.png_ico_docu {
+    margin-right: 2px;
+    background: url(/static/ztree/icon/paddle/grn-blank.png) no-repeat scroll 0 0 transparent;
+    /*background: url(/static/ztree/icon/shapes/homegardenbusiness.png) no-repeat scroll 0 0 transparent;*/
+    background-size: 16px 16px;
+    vertical-align: top
+}
+
+.ztree li span.button.placemark_square\.png_ico_docu {
+    margin-right: 2px;
+    background: url(/static/ztree/icon/shapes/placemark_square.png) no-repeat scroll 0 0 transparent;
+    /*background: url(/static/ztree/icon/shapes/homegardenbusiness.png) no-repeat scroll 0 0 transparent;*/
+    background-size: 16px 16px;
+    vertical-align: top
+}
+
+.ztree li span.button.placemark_circle\.png_ico_docu {
+    margin-right: 2px;
+    background: url(/static/ztree/icon/shapes/placemark_circle.png) no-repeat scroll 0 0 transparent;
+    /*background: url(/static/ztree/icon/shapes/homegardenbusiness.png) no-repeat scroll 0 0 transparent;*/
+    background-size: 16px 16px;
+    vertical-align: top
+}
+
+.ztree li span.button.water\.png_ico_docu {
+    margin-right: 2px;
+    background: url(/static/ztree/icon/shapes/water.png) no-repeat scroll 0 0 transparent;
+    /*background: url(/static/ztree/icon/shapes/homegardenbusiness.png) no-repeat scroll 0 0 transparent;*/
+    background-size: 16px 16px;
+    vertical-align: top
+}
+
+.ztree li span.button.homegardenbusiness\.png_ico_docu {
+    margin-right: 2px;
+    background: url(/static/ztree/icon/shapes/homegardenbusiness.png) no-repeat scroll 0 0 transparent;
+    background-size: 16px 16px;
+    vertical-align: top
+}

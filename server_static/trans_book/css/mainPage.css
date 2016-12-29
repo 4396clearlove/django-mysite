@@ -1,0 +1,64 @@
+html,body{
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+
+#navbarIcon {
+	height: 50px;
+	width: 80px;
+	background: url(/static/trans_book/pic/unicom.jpg);
+	background-size: contain;
+	background-repeat:no-repeat;
+}
+
+#headerSearchBox {
+	/*font-size: 0px;*/
+}
+
+/*#advancedSearchBox {
+	display: none;
+	width: 320px;
+	height: 100px;
+	position: absolute;
+	top:42px;
+	left:15px;
+	background-color: #fff;
+	box-shadow: 1px 2px 1px rgba(0,0,0,.15);
+}
+
+#searchBoxOpenButton {
+	background: url('/static/trans_book/pic/searchbox.png') no-repeat 0 -4px;
+	height: 30px;
+	width: 36px;
+	/*float: right;*/
+	vertical-align: middle;
+	cursor: pointer;
+	position: absolute;
+	left: 297px;
+	top:9px;
+	display: block;
+	background-color: #fff;
+	border-left: 1px solid #eee;
+}
+
+#searchBoxCloseButton {
+	display: none;
+	background: url('/static/trans_book/pic/searchbox.png') no-repeat 0 -42px;
+	height: 30px;
+	width: 36px;
+	/*float: right;*/
+	vertical-align: middle;
+	cursor: pointer;
+	position: absolute;
+	left: 297px;
+	top:9px;
+	display: block;
+	background-color: #fff;
+	border-left: 1px solid #eee;
+}*/
+
+#C2LeftT1Toolbar > input {
+	display: inline-block;
+}

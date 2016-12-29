@@ -1,0 +1,36 @@
+{
+  "name": "tableExport.jquery.plugin",
+  "version": "1.6.0",
+  "main": "tableExport.min.js",
+  "license": "MIT",
+  "description": "html table export",
+  "authors": [
+    "hhurz",
+    "kayalshri"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "dependencies": {
+    "jquery": ">=1.9.1",
+    "filesaver.js": "*",
+    "html2canvas": "*",
+    "jspdf": "1.0.272 || 1.1.239",
+    "jspdf-autotable": "2.0.9 || 2.0.14",
+    "js-xlsx": "0.8.14"
+  },
+  "keywords": [
+    "html5",
+    "javascript",
+    "jquery",
+    "export",
+    "table"
+  ],
+  "ignore": [
+    "libs",
+    "test",
+    "tools",
+    "package.json",
+    "tableExport.js"
+  ]
+}

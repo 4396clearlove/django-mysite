@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
+import os, platform
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -103,6 +103,9 @@ DATABASES = {
     }
 }
 
+if platform.system()=='Linux':
+        DATABASES['flow_monitor']['ENGINE'] = 'SQL Server'
+
 
 DATABASE_ROUTERS = ['mysite_tz.db_route.Router']
 #db_route.py与settings.py放在一个文件夹
@@ -135,19 +138,19 @@ STATICFILES_DIRS = [
 os.path.join(BASE_DIR, "static"),
 ]
 
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+if platform.system()=='Windows':
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
         },
-    },
-    'loggers': {
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'DEBUG' if DEBUG else 'INFO',
+        'loggers': {
+            'django.db.backends': {
+                'handlers': ['console'],
+                'level': 'DEBUG' if DEBUG else 'INFO',
+            },
         },
-    },
-}
+    }

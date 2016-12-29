@@ -43,7 +43,7 @@ def get_usage(request, id):
             # date = datetime.date(2016, 12, 13)
             date = ring_flow_table.objects.only('date').order_by('date')[:1][0].date
             ring = ring_flow_table.objects.filter(date=date).order_by("-down_link_usage")[:5][id-2].name
-            instances = ring_flow_table.objects.filter(name=ring).order_by("date")
+            instances = ring_flow_table.objects.filter(name=ring).order_by("date")[:7]
         else:
             pass
 

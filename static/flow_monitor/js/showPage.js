@@ -45,12 +45,12 @@ function initCharts(){
                 tooltip: {
                     trigger: 'axis'
                 },
-                legend: {
-                    data:['带宽利用率'],
-                    orient: "vertical",
-                    right:0,
-                    top: "40%"
-                },
+                // legend: {
+                //     data:['带宽利用率'],
+                //     orient: "vertical",
+                //     right:0,
+                //     top: "40%"
+                // },
                 visualMap: {
                     // type: 'continuous'
                     type: 'piecewise',
@@ -91,12 +91,12 @@ function initCharts(){
                 tooltip: {
                     trigger: 'axis'
                 },
-                legend: {
-                    data:['带宽利用率'],
-                    orient: "vertical",
-                    right:0,
-                    top: "40%"
-                },
+                // legend: {
+                //     data:['带宽利用率'],
+                //     orient: "vertical",
+                //     right:0,
+                //     top: "40%"
+                // },
                 visualMap: {
                     type: 'piecewise',
                     show: false
@@ -136,12 +136,12 @@ function initCharts(){
                 tooltip: {
                     trigger: 'axis'
                 },
-                legend: {
-                    data:['带宽利用率'],
-                    orient: "vertical",
-                    right:0,
-                    top: "40%"
-                },
+                // legend: {
+                //     data:['带宽利用率'],
+                //     orient: "vertical",
+                //     right:0,
+                //     top: "40%"
+                // },
                 visualMap: {
                     type: 'piecewise',
                     show: false
@@ -196,21 +196,21 @@ function slideCharts(index){
             success:function(content){
                 var option = {
                     title: {
-                        text: content.ring,
+                        text: content.ring+'最近七天流量',
                         left: "50%",
                         textAlign: "center"
                     },
                     tooltip: {
                         trigger: 'axis'
                     },
-                    toolbox: {
-                        feature: {
-                            dataView: {show: true, readOnly: false},
-                            magicType: {show: true, type: ['line', 'bar']},
-                            restore: {show: true},
-                            saveAsImage: {show: true}
-                        }
-                    },
+                    // toolbox: {
+                    //     feature: {
+                    //         dataView: {show: true, readOnly: false},
+                    //         magicType: {show: true, type: ['line', 'bar']},
+                    //         restore: {show: true},
+                    //         saveAsImage: {show: true}
+                    //     }
+                    // },
                     legend: {
                         orient: "vertical",
                         right:0,

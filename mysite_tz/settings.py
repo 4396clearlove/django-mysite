@@ -105,7 +105,7 @@ DATABASES = {
 
 if platform.system()=='Linux':
         DATABASES['flow_monitor']['OPTIONS'] = {
-            'DSN': 'MyDSN'
+            'dsn': 'MyDSN'
         }
 
 
@@ -128,7 +128,7 @@ USE_TZ = False  #不开启时区
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-STATIC_ROOT = 'server_static'   #命令python manage.py collectstatic会把所有静态文件保存在这里
+STATIC_ROOT = 'server_static/static'   #命令python manage.py collectstatic会把所有静态文件保存在这里
 
 STATIC_URL = '/static/'     #'django.contrib.staticfiles'只会搜索每个app中的static文件夹，不会搜索主目录的static文件夹
 

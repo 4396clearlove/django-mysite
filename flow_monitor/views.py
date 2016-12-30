@@ -1,7 +1,7 @@
 #-*- coding:utf8 -*-
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
-from django.db.models import Q
+from django.db.models import Q, F, When, Case
 # from django.db import connections
 from .models import *
 # Create your views here.
@@ -14,23 +14,29 @@ def get_top5(request):
     if request.method=='POST':
         # date = datetime.datetime(2016, 12, 13)
         date = ring_flow_table.objects.only('date').order_by('date')[:1][0].date
+
+        d_lt_u = When(down_link_usage__gt=F('up_link_usage'), then='down_link_usage')
+        condition = Case(d_lt_u, default='up_link_usage')
         # import pdb;pdb.set_trace()
-        h_instances = ring_flow_table.objects.filter(Q(name__startswith='H'),date=date).order_by("-down_link_usage")[:5]
-        j_instances = ring_flow_table.objects.filter(Q(name__startswith='J'),date=date).order_by("-down_link_usage")[:5]
-        r_instances = ring_flow_table.objects.filter(Q(name__startswith='R'),date=date).order_by("-down_link_usage")[:5]
+        h_instances = ring_flow_table.objects.filter(Q(name__startswith='H'),date=date).values('name').annotate(max_link_usage= condition).order_by('-max_link_usage').values_list('name','max_link_usage')[:5]
+        j_instances = ring_flow_table.objects.filter(Q(name__startswith='J'),date=date).values('name').annotate(max_link_usage= condition).order_by('-max_link_usage').values_list('name','max_link_usage')[:5]
+        r_instances = ring_flow_table.objects.filter(Q(name__startswith='R'),date=date).values('name').annotate(max_link_usage= condition).order_by('-max_link_usage').values_list('name','max_link_usage')[:5]
+        # h_instances = ring_flow_table.objects.filter(Q(name__startswith='H'),date=date).order_by("-down_link_usage")[:5]
+        # j_instances = ring_flow_table.objects.filter(Q(name__startswith='J'),date=date).order_by("-down_link_usage")[:5]
+        # r_instances = ring_flow_table.objects.filter(Q(name__startswith='R'),date=date).order_by("-down_link_usage")[:5]
         return JsonResponse(
             {
                 "hring":{
-                    "usage": [instance.down_link_usage for instance in h_instances],
-                    "ring": [instance.name.decode('gbk') for instance in h_instances]
+                    "usage": [i[1] for i in h_instances],
+                    "ring": [i[0].decode('gbk') for i in h_instances],
                 },
                 "jring":{
-                    "usage": [instance.down_link_usage for instance in j_instances],
-                    "ring": [instance.name.decode('gbk') for instance in j_instances]
+                    "usage": [i[1] for i in j_instances],
+                    "ring": [i[0].decode('gbk') for i in j_instances],
                 },
                 "rring":{
-                    "usage": [instance.down_link_usage for instance in r_instances],
-                    "ring": [instance.name.decode('gbk') for instance in r_instances]
+                    "usage": [i[1] for i in r_instances],
+                    "ring": [i[0].decode('gbk') for i in r_instances],
                 }
             },
             safe=False
@@ -49,8 +55,8 @@ def get_usage(request, id):
 
         return JsonResponse(
             {
-            "averageUsage":[instance.down_link_usage for instance in instances],
-            "peakUsage": [instance.down_link_peak_usage for instance in instances],
+            "averageUsage":[instance.down_link_usage if instance.down_link_usage>instance.up_link_usage else instance.up_link_usage  for instance in instances],
+            "peakUsage": [instance.down_link_peak_usage if instance.down_link_peak_usage>instance.up_link_peak_usage else instance.up_link_peak_usage  for instance in instances],
             "ring": ring,
             "date":[instance.date for instance in instances]
             },

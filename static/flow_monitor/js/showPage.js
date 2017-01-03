@@ -32,7 +32,6 @@ function initCharts(){
             var csrftoken = Cookies.get('csrftoken');
             xhr.setRequestHeader("X-CSRFToken", csrftoken)
         },
-        // data:dataPara,
         dataType:"json",
         type:"POST",
         success:function(content){
@@ -182,82 +181,119 @@ function initCharts(){
 function slideCharts(index){
     if(index==1){
         initCharts()
+        return null
     }
-    else{
-        var chart = echarts.init(document.getElementById('chart'+index));
-        $.ajax({
-            url: "/flow_monitor/usage/"+index,
+    else if(index==2){
+        var data = {
+            ringIndex: "H",
+            count: 4,
+            begin: 0
+        }
+    }else if(index==3){
+        var data = {
+            ringIndex: "H",
+            count: 4,
+            begin: 4
+        }
+    }else if(index==4){
+        var data = {
+            ringIndex: "J",
+            count: 4,
+            begin: 0
+        }
+    }else if(index==5){
+        var data = {
+            ringIndex: "J",
+            count: 4,
+            begin: 4
+        }
+    }else if(index==6){
+        var data = {
+            ringIndex: "R",
+            count: 4,
+            begin: 0
+        }
+    }
+    var charts = [];
+    for(var y=1;y<=4; y++){
+        charts.push(echarts.init(document.getElementById('chart'+index+'_'+y)));
+    }
+    $.ajax({
+            url: "/flow_monitor/usage",
             beforeSend:function(xhr,settings){
                 var csrftoken = Cookies.get('csrftoken');
                 xhr.setRequestHeader("X-CSRFToken", csrftoken)
             },
             dataType:"json",
+            data: data,
             type:"POST",
-            success:function(content){
-                var option = {
-                    title: {
-                        text: content.ring+'最近七天流量',
-                        left: "50%",
-                        textAlign: "center"
-                    },
-                    tooltip: {
-                        trigger: 'axis'
-                    },
-                    // toolbox: {
-                    //     feature: {
-                    //         dataView: {show: true, readOnly: false},
-                    //         magicType: {show: true, type: ['line', 'bar']},
-                    //         restore: {show: true},
-                    //         saveAsImage: {show: true}
-                    //     }
-                    // },
-                    legend: {
-                        orient: "vertical",
-                        right:0,
-                        top: "30%",
-                        data:['平均带宽利用率','峰值带宽利用率']
-                    },
-                    xAxis: [
-                        {
-                            type: 'category',
-                            data:content['date'],
-                            name: '日期'
-                        }
-                    ],
-                    yAxis: [
-                        {
-                            type: 'value',
-                            name: '利用率',
-                            min: 0,
-                            max: 100,
-                            interval: 10,
-                            axisLabel: {
-                                formatter: '{value} %'
-                            }
-                        }
-                    ],
-                    series: [
-                        {
-                            name:'平均带宽利用率',
-                            type:'bar',
-                            data:content['averageUsage'],
-                            markLine: {
-                                data: [{
-                                    name: '预警线',
-                                    yAxis: 70
-                                }]
-                            }
+            success:function(contents){
+                for(var i=0; i<contents.length; i++){
+                    var content = contents[i];
+                    var option = {
+                        title: {
+                            text: content.ring+'最近五天流量',
+                            left: "50%",
+                            textAlign: "center"
                         },
-                        {
-                            name:'峰值带宽利用率',
-                            type:'bar',
-                            barGap: '0%',
-                            data:content['peakUsage']
-                        }
-                    ]
-                };
-                chart.setOption(option);
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        // toolbox: {
+                        //     feature: {
+                        //         dataView: {show: true, readOnly: false},
+                        //         magicType: {show: true, type: ['line', 'bar']},
+                        //         restore: {show: true},
+                        //         saveAsImage: {show: true}
+                        //     }
+                        // },
+                        legend: {
+                            orient: "vertical",
+                            right:0,
+                            top: "0%",
+                            data:['平均带宽利用率','峰值带宽利用率']
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data:content['date'],
+                                name: '日期'
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value',
+                                name: '利用率',
+                                min: 0,
+                                max: 100,
+                                interval: 10,
+                                axisLabel: {
+                                    formatter: '{value} %'
+                                }
+                            }
+                        ],
+                        series: [
+                            {
+                                name:'平均带宽利用率',
+                                type:'bar',
+                                data:content['averageUsage'],
+                                markLine: {
+                                    data: [{
+                                        name: '预警线',
+                                        yAxis: 70
+                                    }]
+                                }
+                            },
+                            {
+                                name:'峰值带宽利用率',
+                                type:'bar',
+                                barGap: '0%',
+                                data:content['peakUsage']
+                            }
+                        ]
+                        };
+                    charts[i].setOption(option);
+                }
             }
-        });
-    } 
+    });
 }

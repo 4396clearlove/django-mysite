@@ -2,7 +2,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Q, F, When, Case
-# from django.db import connections
 from .models import *
 # Create your views here.
 import datetime
@@ -43,26 +42,48 @@ def get_top5(request):
             safe=False
         )
 
-def get_usage(request, id):
+def get_usage(request):
     if request.method=='POST':
-        id = int(id)
-        if id>=2 and id<=6:
-            # import pdb;pdb.set_trace()
-            date = ring_flow_table.objects.only('date').order_by('-date')[:1][0].date
-            # ring = ring_flow_table.objects.filter(date=date).order_by("-down_link_usage")[:5][id-2].name
-            ring = ring_flow_table.objects.filter(date=date).order_by("-link_usage")[:5][id-2].name
-            instances = ring_flow_table.objects.filter(name=ring).order_by("date")[:7]
-        else:
-            pass
+            count = int(request.POST['count'])
+            ringIndex = request.POST['ringIndex']
+            begin = int(request.POST['begin'])
 
-        return JsonResponse(
-            {
-            # "averageUsage":[instance.down_link_usage if instance.down_link_usage>instance.up_link_usage else instance.up_link_usage  for instance in instances],
-            # "peakUsage": [instance.down_link_peak_usage if instance.down_link_peak_usage>instance.up_link_peak_usage else instance.up_link_peak_usage  for instance in instances],
-            "averageUsage": [instance.link_usage for instance in instances],
-            "peakUsage": [instance.link_peak_usage for instance in instances],
-            "ring": ring,
-            "date":[instance.date for instance in instances]
-            },
-            safe=False
-        )
+            date = ring_flow_table.objects.only('date').order_by('-date')[:1][0].date
+
+            a = '(select top 8 row_number() over(order by link_usage desc) as row_number,* from Ring_flow where date in (select max(date) from Ring_flow) and name like \'%s%%\') as A' % (ringIndex+"%")
+            b = '(select top %d name, row_number from %s where row_number not in (select top %d row_number from %s)) as B' % (count, a, begin, a)
+
+            sql = 'select * from Ring_flow as C inner join %s on C.name=B.name where date in (select distinct top 5 date from Ring_flow order by date desc) order by row_number, date' % b
+            instances = ring_flow_table.objects.raw(sql)
+
+            # instances = zip(*instances)
+
+            tmp_name = None
+            out_list = []
+            out_dict = {}                
+            for instance in instances:
+                if tmp_name is None:
+                    out_dict.setdefault("ring", (instance.name).decode('gbk'));
+                    out_dict.setdefault("averageUsage",[]).append(instance.link_usage)
+                    out_dict.setdefault("peakUsage",[]).append(instance.link_peak_usage)
+                    out_dict.setdefault("date",[]).append(instance.date)
+                    tmp_name = instance.name
+                    continue
+                if instance.name!=tmp_name:
+                    if out_dict != {}:
+                        out_list.append(out_dict)
+                        out_dict = {}
+                    out_dict.setdefault("ring", (instance.name).decode('gbk'));
+                    out_dict.setdefault("averageUsage",[]).append(instance.link_usage)
+                    out_dict.setdefault("peakUsage",[]).append(instance.link_peak_usage)
+                    out_dict.setdefault("date",[]).append(instance.date)
+                    tmp_name = instance.name
+                else:
+                    out_dict.setdefault("averageUsage",[]).append(instance.link_usage)
+                    out_dict.setdefault("peakUsage",[]).append(instance.link_peak_usage)
+                    out_dict.setdefault("date",[]).append(instance.date)
+
+            out_list.append(out_dict)
+
+    # import pdb;pdb.set_trace()
+    return JsonResponse(out_list, safe=False)

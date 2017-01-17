@@ -72,7 +72,8 @@ def ztreeGetNodes(request):
             id = request.POST['id']
             level0ObjList = coordinates_table.objects.filter(ParentIdent=id)
         else:
-            level0ObjList = coordinates_table.objects.filter(Level=0)
+            # level0ObjList = coordinates_table.objects.filter(Level=0)
+            level0ObjList = coordinates_table.objects.filter(ParentIdent=None)
 
         content = []
         for level0Obj in level0ObjList:
@@ -225,8 +226,28 @@ def ztreeSearch(request):
 
         return JsonResponse(contentList,safe=False)
 
+
+def ztreeEdit(request):
+    if request.method=='POST':
+
+        nodeIds = json.loads(request.POST['nodeIds'])
+        moveType = request.POST['moveType']
+        targetNodeId = request.POST['targetNodeId']
+
+        if moveType=='inner':
+            parentId = targetNodeId
+        elif moveType in ['prev','next']:
+            parentId = coordinates_table.objects.get(ElementIdent=targetNodeId).ParentIdent
+        
+        for nodeId in nodeIds:
+            element = coordinates_table.objects.get(ElementIdent=nodeId)
+            element.ParentIdent = parentId
+            element.save()
+
+        return HttpResponse(None)
+
+
 def csv(request):
-    #import pdb;pdb.set_trace()
     import csv
     if request.method=="POST":
 

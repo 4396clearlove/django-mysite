@@ -29,7 +29,16 @@ var setting = {
     callback: {
         onCheck: onCheck,    //选定及取消复选框调用的事件
         onDrop: onDrop,  //用于捕获节点拖拽操作结束的事件回调函数
-        onClick: onClick   //节点被点击触发
+        onClick: onClick,   //节点被点击触发
+
+    },
+    edit: {
+        enable: true,
+        showRemoveBtn: true,
+        removeTitle: "删除",
+        drag: {
+
+        }
     }
 };
 
@@ -127,7 +136,7 @@ function onCheck(e, treeId, treeNode) {
     $.each(nodes,function(i){
         var flag = nodes[i].checked;
         if(flag){
-            addOverlay(nodes[i].id, nodes[i].name); //nodes[i].tId表示节点的唯一标识，如112,212
+            addOverlay(nodes[i].id, nodes[i].name); //nodes[i].Id表示节点的唯一标识，id是唯一的，如1484205616.28.826
         }else{
             removeOverlay(nodes[i].id);
         }
@@ -135,7 +144,37 @@ function onCheck(e, treeId, treeNode) {
 }
 
 function onDrop(e, treeId, treeNodes, targetNode, moveType, isCopy){
+    // moveType:"inner"：成为子节点，"prev"：成为同级前一个节点，"next"：成为同级后一个节点
     console.log(targetNode);
+
+    if(moveType==null){
+        return null
+    }
+
+    if(targetNode==null){
+        var targetNodeId = null;
+    } else {
+        var targetNodeId = targetNode.id;
+    }
+
+    var nodeIds = [];
+    $.each(treeNodes, function(i){
+        nodeIds.push(treeNodes[i].id);
+    });
+
+    var param = {'moveType':moveType,'targetNodeId':targetNodeId,'nodeIds':JSON.stringify(nodeIds)};
+    $.ajax({
+        url: "/bmap/ztree/edit/",
+        data: param, //这里是js的字典
+        beforeSend: function(xhr, settings) {
+            var csrftoken = Cookies.get('csrftoken');
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        },
+        type: "POST",
+        error: function() {
+            alert('编辑失败！');
+        }
+    });
 }
 
 

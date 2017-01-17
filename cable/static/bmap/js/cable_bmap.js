@@ -1,4 +1,6 @@
 var map = new BMap.Map("map", {enableMapClick:false}); //关闭地图的地图可点功能
+// var selectedOverlays = new Array();    //全局变量，用于储存鼠标选定的覆盖物组，是数组
+var selectedOverlayId = null;
 var zTreeOverlay = {} //全局变量，用于存zTreeId对应的百度图层类容
 var colorArray = ['#FB054B','#3127D2', '#05AD0C', 'blue', '#C40AF6','#562B2B',  '#010B0A', '#94F807','#2C4C90', '#F607E0', '#C34F26']
 var colorIndex = 0
@@ -66,8 +68,9 @@ map.addControl(PanoramaControl);
 
 
 /**
- * 定义右键菜单
+ * 定义右键菜单，通过moveCircleMarker中添加的右键事件来打开
  */
+var SelectedPolyline = null;
 var contextMenu = new BMap.ContextMenu();
 var contextPoint;   //使用全局变量来存右键位置，传给InfoOverlay使用
 contextMenu.addEventListener('open', function(e) {
@@ -90,8 +93,14 @@ var menuItemAdd = new BMap.MenuItem('添加标注', function() {
     });
     map.addOverlay(markerIcon);         //将标注添加到地图中
 });
+var menuItemDelete = new BMap.MenuItem('移除', function(){
+    var selectedOverlays = zTreeOverlay[selectedOverlayId]; //selectedOverlayId是全局数组
+    $.each(selectedOverlays, function(i) {
+        map.removeOverlay(selectedOverlays[i]);
+    });
+});
 contextMenu.addItem(menuItemAdd);
-
+contextMenu.addItem(menuItemDelete);
 /**
  * 定义随鼠标动的小圈
  */
@@ -106,13 +115,12 @@ var moveCircleMarker = new BMap.Marker(new BMap.Point(),{
     "icon":moveCircleIcon
 });
 moveCircleMarker.hide();
-moveCircleMarker.addEventListener('click',function(){test('1123')});
+moveCircleMarker.addEventListener('click',function(){
+    var selectedOverlays = zTreeOverlay[selectedOverlayId]; //selectedOverlayId是全局数组
+    map.setViewport(selectedOverlays[0].getPath());
+});
 moveCircleMarker.addContextMenu(contextMenu);   //添加右键菜单
 map.addOverlay(moveCircleMarker);
-
-test = function(msg){
-    alert(msg)
-}
 
 /**
 定义悬浮的Label显示距离 
@@ -247,7 +255,7 @@ InfoOverlay.prototype.hide = function() {
  * @param {[type]} para    [需要查询的参数]
  * @param {[type]} ztreeid [ztreeid，用于对应储存覆盖物，以便移除时调用]
  */
-function addOverlay(id, name) {
+function addOverlay(id, name) { //id是唯一的，如1484205616.28.826
     $("#map").showLoading();
     $.ajax({
         url: "/bmap/search_cable/",
@@ -356,7 +364,7 @@ function addOverlay(id, name) {
                     
                     var circleIcon = new BMap.Symbol(BMap_Symbol_SHAPE_CIRCLE, {  //应用矢量图标
                         strokeColor: "blue",
-                        scale: 6,
+                        scale: 4,
                         strokeWeight: 0.1,
                         fillColor: "green",
                         fillOpacity: 0.8//填充透明度,默认是0，看不到填充的颜色
@@ -399,11 +407,14 @@ function addOverlay(id, name) {
 
                     polyline.addEventListener('mouseover', function(e) {
                         map.addEventListener('mousemove', markerShowInfo);
+                        // selectedOverlays = [this, markerStart, markerEnd]; //selectedOverlays全局数组。用于存储选定的覆盖物，便于删除及居中
+                        selectedOverlayId = id; //selectedOverlayId为全局变量。用于存储选定的覆盖物zTree的ID，便于删除及居中
                     });
 
                     polyline.addEventListener('mouseout', function(e) {
-                        moveCircleMarker.hide()
-                        label.hide()
+                        moveCircleMarker.hide();
+                        label.hide();
+                        // selectedOverlays = [];
                         map.removeEventListener('mousemove', markerShowInfo);
                     });
 

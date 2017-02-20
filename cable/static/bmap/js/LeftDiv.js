@@ -29,7 +29,8 @@ var setting = {
     callback: {
         onCheck: onCheck,    //选定及取消复选框调用的事件
         onDrop: onDrop,  //用于捕获节点拖拽操作结束的事件回调函数
-        onClick: onClick,   //节点被点击触发
+        // onClick: onClick,   //节点被点击触发
+        onRemove: onRemove, //节点被删除时触发
 
     },
     edit: {
@@ -145,7 +146,7 @@ function onCheck(e, treeId, treeNode) {
 
 function onDrop(e, treeId, treeNodes, targetNode, moveType, isCopy){
     // moveType:"inner"：成为子节点，"prev"：成为同级前一个节点，"next"：成为同级后一个节点
-    console.log(targetNode);
+    // console.log(targetNode);
 
     if(moveType==null){
         return null
@@ -178,7 +179,27 @@ function onDrop(e, treeId, treeNodes, targetNode, moveType, isCopy){
 }
 
 
-function onClick(e, treeId, treeNode){
-    treeNode.checked=true;
-    onCheck(e,treeId,treeNode)
+// function onClick(e, treeId, treeNode){
+//     treeNode.checked=true;
+//     onCheck(e,treeId,treeNode)
+// }
+
+
+function onRemove(e, treeId, treeNode){
+    var action = "remove";
+    var nodeId = treeNode.id;
+
+    var param = {'nodeId':nodeId};
+    $.ajax({
+        url: "/bmap/ztree/remove/",
+        data: param, //这里是js的字典
+        beforeSend: function(xhr, settings) {
+            var csrftoken = Cookies.get('csrftoken');
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        },
+        type: "POST",
+        error: function() {
+            alert('删除失败！');
+        }
+    });
 }

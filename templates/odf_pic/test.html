@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>机房ODF信息</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+        <link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.4.5/themes/material/easyui.css">
+        <link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.4.5/themes/mobile.css">
+        <link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.4.5/themes/icon.css">
+        <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+        <script type="text/javascript" src="/static/jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
+        <script type="text/javascript" src="/static/jquery-easyui-1.4.5/jquery.easyui.mobile.js"></script>
+        <script type="text/javascript" src="/static/pinchzoom/src/pinchzoom.min.js"></script>
+    </head>
+
+    <body>
+        <div class="easyui-navpanel">
+            <header>
+                <div class="m-toolbar">
+                    <div class="m-title">机房ODF信息</div>
+                    <div class="m-right">
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true"></a>
+                        <!-- <a href="javascript:void(0)" class="easyui-menubutton" data-options="iconCls:'icon-more',menu:'#mm',menuAlign:'right',hasDownArrow:false"></a> -->
+                    </div>
+                </div>
+            </header>
+            <div class="easyui-tabs" data-options="tabHeight:30,fit:true,tabPosition:'bottom',border:false,pill:true,narrow:true,justified:true">
+                <div style="padding:10px">
+                    <div class="panel-header tt-inner">
+                        ODF图片
+                    </div>
+                    <h2>{{image.Lab.Name}}<br>
+                        <span>{{image.Position}}</span></h2>
+                    <!-- <img id="pic_show" src={{ image.Image.url }}/> -->
+                    <img id="pic_show" src={{ image.Image.url }}/>
+                </div>
+                <div style="padding:10px">
+                    <div class="panel-header tt-inner">
+                        Scanner
+                    </div>
+                    <ul id="tab2_tree">
+                        <li>
+                            <span>My Documents</span>
+                            <ul>
+                                <li data-options="state:'closed'">
+                                    <span>Photos</span>
+                                    <ul>
+                                        <li>
+                                            <span>Friend</span>
+                                        </li>
+                                        <li>
+                                            <span>Wife</span>
+                                        </li>
+                                        <li>
+                                            <span>Company</span>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span>Program Files</span>
+                                    <ul>
+                                        <li>Intel</li>
+                                        <li>Java</li>
+                                        <li>Microsoft Office</li>
+                                        <li>Games</li>
+                                    </ul>
+                                </li>
+                                <li>index.html</li>
+                                <li>about.html</li>
+                                <li>welcome.html</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div style="padding:10px">
+                    <div class="panel-header tt-inner">
+                        Pda
+                    </div>
+                    <p>A personal digital assistant (PDA), also known as a palmtop computer, or personal data assistant, is a mobile device that functions as a personal information manager. PDAs are largely considered obsolete with the widespread adoption of smartphones.</p>
+                </div>
+            </div>
+            
+        </div>
+        <style scoped>
+           .tt-inner{
+                display:inline-block;
+                line-height:12px;
+                padding-top:5px;
+            }
+            p{
+                line-height:150%;
+            }
+        </style>
+    </body>
+</html>
+<script>
+new RTP.PinchZoom($('#pic_show'));
+</script>

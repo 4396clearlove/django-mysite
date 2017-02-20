@@ -42,7 +42,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'netopo',
     'cable',
-    'flow_monitor'
+    'flow_monitor',
+    'odf_pic'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -100,6 +101,10 @@ DATABASES = {
         'HOST': '10.117.193.233',
         'USER': 'zhongpeihong',
         'PASSWORD': 'Unicom2015',
+    },
+    'odf_pic':{
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'odf.sqlite3'),
     }
 }
 

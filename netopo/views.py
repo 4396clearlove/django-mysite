@@ -13,6 +13,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.db import connections
+from django.db.models import Q, F
 
 import json
 import re
@@ -520,7 +521,7 @@ def ipran_ring(request):
         RingName = request.POST['ring']
         type = request.POST['type']
         if type=='hw_ipran':
-            linkList = hw_ipran_link.objects.filter(ring=RingName).values_list('source','dest')
+            linkList = hw_ipran_link.objects.filter(Q(ring=RingName)&Q(isDelete=False)).values_list('source','dest')
             # 'ValuesListQuerySet' object has no attribute 'extend'，所以得转为list
 
             linkList = list(linkList)   #转为list类型才能extend带环点对接

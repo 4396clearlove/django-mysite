@@ -2,6 +2,7 @@
 
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
+from django.db.models import Q, F
 
 from .models import *
 import re
@@ -66,14 +67,13 @@ def bmapUploadImg(request):
 
 
 def ztreeGetNodes(request):
-    #import pdb;pdb.set_trace()
     if request.method=='POST':
         if request.POST.has_key('id'):
             id = request.POST['id']
-            level0ObjList = coordinates_table.objects.filter(ParentIdent=id)
+            level0ObjList = coordinates_table.objects.filter(Q(ParentIdent=id) & Q(IsDelete=False))
         else:
             # level0ObjList = coordinates_table.objects.filter(Level=0)
-            level0ObjList = coordinates_table.objects.filter(ParentIdent=None)
+            level0ObjList = coordinates_table.objects.filter(Q(ParentIdent=None) & Q(IsDelete=False))
 
         content = []
         for level0Obj in level0ObjList:
@@ -243,6 +243,16 @@ def ztreeEdit(request):
             element = coordinates_table.objects.get(ElementIdent=nodeId)
             element.ParentIdent = parentId
             element.save()
+
+        return HttpResponse(None)
+
+def ztreeRemove(request):
+    if request.method=='POST':
+
+        nodeId = request.POST['nodeId']
+        element = coordinates_table.objects.get(ElementIdent=nodeId)
+        element.IsDelete = True
+        element.save()
 
         return HttpResponse(None)
 

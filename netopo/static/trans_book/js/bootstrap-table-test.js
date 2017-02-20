@@ -567,7 +567,10 @@ function generate_ring_echart(data, name){ //name为选取节点的名称
     // var myChart = echarts.init(document.getElementById('ring-graph'));
 
     myChart.setOption(option);
-
+    document.oncontextmenu = function () { return false; }; //屏蔽浏览器的右键
+    myChart.on("contextmenu", function(param){          //定义eCharts的右键，升级到3.4.0才有右键功能
+        console.log(param);
+    })
     // myChart.on('click', function(param){
     //     console.log(param);
     // });

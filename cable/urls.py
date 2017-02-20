@@ -13,6 +13,7 @@ urlpatterns = [
     url(r"^ztree/getdata/$", views.ztreeGetNodes),
     url(r"^ztree/search/$", views.ztreeSearch),
     url(r"^ztree/edit/$", views.ztreeEdit),
+    url(r"^ztree/remove/$", views.ztreeRemove),
     url(r"^mobile/easyui_tree/$", views.mobileEasyuiTree),
     url(r'^csv/$',views.csv),
     url(r"^main_polyline/$",views.main_polyline),

@@ -15,6 +15,7 @@ class coordinates_table(models.Model):
     Color = models.CharField(u"图标颜色", max_length=20, null=True, blank=True)
     ParentIdent = models.CharField(u"父节点标识", max_length=30, null=True, blank=True)
     ElementIdent = models.CharField(u"节点唯一标识", max_length=30, primary_key=True)
+    IsDelete = models.BooleanField(u"是否移除", default=False)
 
     class Meta:
     	app_label = 'cable'

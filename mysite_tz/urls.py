@@ -23,7 +23,8 @@ urlpatterns = [
     url(r'^netopo/', include('netopo.urls')),
     url(r'^ipran_ring/', include('netopo.urls')),
     url(r'^bmap/', include('cable.urls')),
-    url(r'^flow_monitor/', include('flow_monitor.urls'))
+    url(r'^flow_monitor/', include('flow_monitor.urls')),
+    url(r'^odf/', include('odf_pic.urls'))
 #] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ]
 
